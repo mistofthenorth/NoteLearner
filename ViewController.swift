@@ -12,10 +12,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        gravity.magnitude = 0.1
+        gravity.magnitude = 0.2
         gravity.angle = 3.142
         mainView.alpha = 0.2
-
+        
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -24,56 +24,38 @@ class ViewController: UIViewController {
     }
     
     let gravity = UIGravityBehavior()
-
+    
     
     func randomChooser(){
-        gravity.magnitude = 0.1
-        gravity.angle = 3.142
-        let noteNumber = (arc4random_uniform(5)+1)
-        switch noteNumber
-        {case 1: println("The note is 1")
-            let middleC = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Middle_C", ofType: "png")!)
-            let middleCView = UIImageView(image: middleC)
-            middleCView.frame = CGRectMake(CGRectGetMaxX(mainView.frame)-257, 400, 257, 120)
-            view.addSubview(middleCView)
-            middleCUIView = middleCView
-            gravity.addItem(middleCView)
+        noteScoreInt++
+        noteScore.text = "\(noteScoreInt)/15"
+        
+        latestNoteView?.removeFromSuperview()
+        var getNewNote = currentLevel?.note()
+
+        latestNoteView = getNewNote
+        let yPosition = arc4random_uniform(UInt32(CGRectGetMaxY(mainView.frame)-400))+100
+        println(yPosition)
+        latestNoteView.frame = CGRectMake(CGRectGetMaxX(mainView.frame)-257, CGFloat(yPosition), 257, 120)
+        view.addSubview(latestNoteView)
+        gravity.addItem(latestNoteView)
+        
+        
+        if (noteScoreInt < 15){
+            var aDelay = NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector:Selector("randomChooser"), userInfo: nil, repeats: false)
+            }
+        if (noteScoreInt == 15){
+            mainView.alpha = 0.2
+            currentLevel?.instrumentType?.level = 2
             
-        case 2: println("The note is 2")
-            let middleD = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Middle_D", ofType: "png")!)
-            let middleDView = UIImageView(image: middleD)
-            middleDView.frame = CGRectMake(CGRectGetMaxX(mainView.frame)-257, 350, 257, 120)
-            view.addSubview(middleDView)
-            middleDUIView = middleDView
-            gravity.addItem(middleDView)
-            
-        case 3: println("The note is 3")
-            let middleE = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Middle_E", ofType: "png")!)
-            let middleEView = UIImageView(image: middleE)
-            middleEView.frame = CGRectMake(CGRectGetMaxX(mainView.frame)-257, 300, 257, 120)
-            view.addSubview(middleEView)
-            middleEUIView = middleEView
-            gravity.addItem(middleEView)
-            
-        case 4: println("The note is 4")
-        let middleF = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Middle_F", ofType: "png")!)
-            let middleFView = UIImageView(image: middleF)
-            middleFView.frame = CGRectMake(CGRectGetMaxX(mainView.frame)-257, 250, 257, 120)
-            view.addSubview(middleFView)
-            middleFUIView = middleFView
-            gravity.addItem(middleFView)
-            
-        case 5: println("The note is 5")
-            let middleG = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Middle_G", ofType: "png")!)
-            let middleGView = UIImageView(image: middleG)
-            middleGView.frame = CGRectMake(CGRectGetMaxX(mainView.frame)-257, 200, 257, 120)
-            view.addSubview(middleGView)
-            middleGUIView = middleGView
-            gravity.addItem(middleGView)
-            
-        default: break
+            levelLabel = UILabel(frame: CGRectMake(0, 0, 200, 21))
+            levelLabel?.center = CGPointMake(450,300)
+            levelLabel?.textAlignment = NSTextAlignment.Center
+            levelLabel?.text = "Hit Start to Begin Level 2"
+            view.addSubview(levelLabel!)
+            }
+
         }
-    }
 
     lazy var animator: UIDynamicAnimator = {let lazilyCreatedUIDynamicAnimator = UIDynamicAnimator(referenceView: self.mainView)
         return lazilyCreatedUIDynamicAnimator
@@ -81,6 +63,11 @@ class ViewController: UIViewController {
     
     func startMoving(){
 //      Use this function for code after pushing start
+        mainView.alpha = 1
+        noteScore.text = "0/15"
+        noteScoreInt = 0
+        levelLabel?.removeFromSuperview()
+
     }
     
     func updatePoints(){
@@ -89,12 +76,23 @@ class ViewController: UIViewController {
     }
     
     @IBAction func newNote() {
+        startMoving()
         randomChooser()
     }
     
     @IBAction func pressStart(sender: AnyObject) {
-        mainView.alpha = 1
+        
+        self.currentLevel = Level(levelNumber: 1, instrument: (sender.currentTitle!)!)
+        noteScore.text = "0/15"
+        println(currentLevel?.whichInstrument)
+        println(currentLevel?.whichLevel)
+
+        var instrument = Instrument(inst: sender.currentTitle!!, setLevel: 1)
+        currentLevel?.instrumentType = instrument
+        println(currentLevel?.instrumentType?.describe)
+
         startButton.removeFromSuperview()
+        altoButton.removeFromSuperview()
         startMoving()
         
     }
@@ -102,47 +100,87 @@ class ViewController: UIViewController {
     
     @IBAction func touchNoteName(sender: AnyObject) {
         let noteName = sender.currentTitle!
+        println(sender.currentTitle!)
+        
+        
         switch noteName!{
         case "C" :
-            if((middleCUIView.window) != nil)
-            {
-                middleCUIView.removeFromSuperview()
+            if (latestNoteView?.window != nil){
+                if latestNoteView.noteName == 1{
                 updatePoints()
+                latestNoteView.removeFromSuperview()
+
+                }
             }
         case "D" :
-            if((middleDUIView.window) != nil)
-            {
-                middleDUIView.removeFromSuperview()
-                updatePoints()
+            if((latestNoteView?.window) != nil){
+                if latestNoteView.noteName == 3{
+                    updatePoints()
+                    latestNoteView.removeFromSuperview()
+             
+                }
             }
         case "E" :
-            if((middleEUIView.window) != nil)
-            {
-                middleEUIView.removeFromSuperview()
-                updatePoints()
+            if((latestNoteView?.window) != nil){
+                if latestNoteView.noteName == 5{
+                    updatePoints()
+                    latestNoteView.removeFromSuperview()
+                    
+                }
             }
         case "F" :
-            if((middleFUIView.window) != nil)
-            {
-                middleFUIView.removeFromSuperview()
-                updatePoints()
+            if((latestNoteView?.window) != nil){
+                if latestNoteView.noteName == 6{
+                    updatePoints()
+                    latestNoteView.removeFromSuperview()
+                    
+                }
+            }
+        case "F#" :
+            if((latestNoteView?.window) != nil){
+                if latestNoteView.noteName == 7{
+                    updatePoints()
+                    latestNoteView.removeFromSuperview()
+                    
+                }
             }
         case "G" :
-            if((middleGUIView.window) != nil)
-            {
-                middleGUIView.removeFromSuperview()
-                updatePoints()
+            if((latestNoteView?.window) != nil){
+                if latestNoteView.noteName == 8{
+                    updatePoints()
+                    latestNoteView.removeFromSuperview()
+                    
+                }
+            }
+        case "A" :
+            if((latestNoteView?.window) != nil){
+                if latestNoteView.noteName == 10{
+                    updatePoints()
+                    latestNoteView.removeFromSuperview()
+                    
+                }
+            }
+        case "B" :
+            if((latestNoteView?.window) != nil){
+                if latestNoteView.noteName == 12{
+                    updatePoints()
+                    latestNoteView.removeFromSuperview()
+                    
+                }
             }
         default: break
         }
         
     }
     var pointsInt: Int = 0
-    weak var middleCUIView: UIView!
-    weak var middleDUIView: UIView!
-    weak var middleEUIView: UIView!
-    weak var middleFUIView: UIView!
-    weak var middleGUIView: UIView!
+    var currentLevel: Level? = nil
+    var noteScoreInt: Int = 0
+    var levelLabel : UILabel?
+    weak var latestNoteView: NoteView!
+
+    @IBOutlet weak var noteScore: UILabel!
+    
+    @IBOutlet weak var altoButton: UIButton!
     @IBOutlet weak var numberOfPoints: UILabel!
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var buttonC: UIButton!
