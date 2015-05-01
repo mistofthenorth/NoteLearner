@@ -16,6 +16,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            println("You got an iPad!")
+        }
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+            println("You got a iPhone")
+            let iphoneStoryboard : UIStoryboard = UIStoryboard(name: "iPhone", bundle: NSBundle.mainBundle())
+            let initialViewController : UIViewController = iphoneStoryboard.instantiateInitialViewController() as! UIViewController
+            
+            window?.rootViewController = initialViewController
+        }
         return true
     }
 

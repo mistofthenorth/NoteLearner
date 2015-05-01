@@ -8,16 +8,16 @@
 
 import UIKit
 
-class Level{
+class GameManager{
 
     let whichLevel : Int?
-    let whichInstrument : String?
     var instrumentType : Instrument? = nil
     
     init(levelNumber: Int, instrument: String)
     {
         self.whichLevel = levelNumber
-        self.whichInstrument = instrument
+        self.instrumentType = Instrument(inst: instrument, setLevel: 1)
+
     }
     
     func note() -> NoteView?{
