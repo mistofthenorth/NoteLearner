@@ -14,7 +14,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         gravity.magnitude = 0.2
         gravity.angle = 3.142
-        mainView.alpha = 0.2
+        startButton.hidden = true
         
         setButtonLayout()
         
@@ -96,6 +96,7 @@ class ViewController: UIViewController {
 
     func newLevel(){
         mainView.alpha = 0.5
+        startButton.hidden = false
         currentGameManager?.instrumentType?.level = 2
         
         betweenLevelTextLabel = UILabel(frame: CGRectMake(0, 0, 200, 21))
@@ -113,10 +114,12 @@ class ViewController: UIViewController {
     
     func startMoving(){
 //      Use this function for code after pushing start
-        mainView.alpha = 1
+        
         noteScore.text = "0/15"
         noteScoreInt = 0
         betweenLevelTextLabel?.removeFromSuperview()
+        startButton.hidden = true
+        mainView.alpha = 1
 
     }
     
@@ -133,12 +136,9 @@ class ViewController: UIViewController {
     @IBAction func chooseInstrument(sender: AnyObject) {
         
         self.currentGameManager = GameManager(levelNumber: 1, instrument: (sender.currentTitle!)!)
-        noteScore.text = "0/15"
-
+        startButton.hidden = false
         trumpetButton.removeFromSuperview()
         altoButton.removeFromSuperview()
-        startMoving()
-        
     }
 
     
@@ -280,6 +280,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var gameView: UIView!
     
+    @IBOutlet weak var startButton: UIButton!
     
 
 }

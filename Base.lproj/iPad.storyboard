@@ -453,6 +453,7 @@
                         <outlet property="mainView" destination="8bC-Xf-vdC" id="gQi-na-wQK"/>
                         <outlet property="noteScore" destination="QGO-ph-COU" id="1lX-ae-CIV"/>
                         <outlet property="numberOfPoints" destination="hM2-iJ-r0f" id="mJQ-Zf-fZ7"/>
+                        <outlet property="startButton" destination="7HX-I9-lco" id="fft-Ob-IjK"/>
                         <outlet property="trumpetButton" destination="9od-R3-kCi" id="OgI-k4-SaI"/>
                     </connections>
                 </viewController>
