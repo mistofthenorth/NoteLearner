@@ -8,8 +8,8 @@
 
 import UIKit
 
-class NoteList{
-
+class NoteList{    
+    
     class func returnNoteList() -> [String: NoteView] {
         var noteList = [String : NoteView]()
         

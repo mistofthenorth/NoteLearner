@@ -10,14 +10,13 @@ import UIKit
 
 class Instrument {
     
-    init(inst: String, setLevel: Int){
-        if (inst == "Trumpet")
-        {
-            instrumentType = .Trumpet
+    init(instrument: String, setLevel: Int){
+        switch instrument{
+        case "Trumpet" : instrumentType = .Trumpet
+        case "Alto Saxophone" : instrumentType = .AltoSaxophone
+        default : instrumentType = .Empty
         }
-        else{
-            instrumentType = .AltoSaxophone
-        }
+        
         
         level = setLevel
         

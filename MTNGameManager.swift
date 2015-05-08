@@ -16,7 +16,7 @@ class GameManager{
     init(levelNumber: Int, instrument: String)
     {
         self.whichLevel = levelNumber
-        self.instrumentType = Instrument(inst: instrument, setLevel: 1)
+        self.instrumentType = Instrument(instrument: instrument, setLevel: 1)
 
     }
     

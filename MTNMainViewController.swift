@@ -66,9 +66,7 @@ class ViewController: UIViewController {
     
         
     }
-    
-    let gravity = UIGravityBehavior()
-    
+
     
     func randomChooser(){
         noteScoreInt++
@@ -108,9 +106,7 @@ class ViewController: UIViewController {
         view.addSubview(betweenLevelTextLabel!)
     }
     
-    lazy var animator: UIDynamicAnimator = {let lazilyCreatedUIDynamicAnimator = UIDynamicAnimator(referenceView: self.mainView)
-        return lazilyCreatedUIDynamicAnimator
-        }()
+
     
     func startMoving(){
 //      Use this function for code after pushing start
@@ -122,10 +118,31 @@ class ViewController: UIViewController {
         mainView.alpha = 1
 
     }
-    
-    func updatePoints(){
+    //The next three functions check for the correct note according to an int representing each note
+    func addPoints(){
         pointsInt += 100
         numberOfPoints.text = String(pointsInt)
+    }
+    func subtractPoints(){
+        pointsInt += -50
+        numberOfPoints.text = String(pointsInt)
+    }
+    func checkForCorrectNote (intRepresentingNote: Int){
+        if (latestNoteView?.window != nil){
+            if latestNoteView.noteName == intRepresentingNote{
+                addPoints()
+                latestNoteView.removeFromSuperview()
+            }
+            else
+            {
+                subtractPoints()
+            }
+        }
+        else
+        {
+            subtractPoints()
+        }
+    
     }
     
     @IBAction func newNote() {
@@ -134,6 +151,7 @@ class ViewController: UIViewController {
     }
     
     @IBAction func chooseInstrument(sender: AnyObject) {
+        
         
         self.currentGameManager = GameManager(levelNumber: 1, instrument: (sender.currentTitle!)!)
         startButton.hidden = false
@@ -148,113 +166,31 @@ class ViewController: UIViewController {
         
         
         switch noteName!{
-        case "C" :
-            if (latestNoteView?.window != nil){
-                if latestNoteView.noteName == 1{
-                updatePoints()
-                latestNoteView.removeFromSuperview()
-
-                }
-            }
-        case "C#/Db" :
-            if (latestNoteView?.window != nil){
-                if latestNoteView.noteName == 2{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-                    
-                }
-            }
-        case "D" :
-            if((latestNoteView?.window) != nil){
-                if latestNoteView.noteName == 3{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-             
-                }
-            }
-        case "D#/Eb" :
-            if (latestNoteView?.window != nil){
-                if latestNoteView.noteName == 4{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-                    
-                }
-            }
-        case "E" :
-            if((latestNoteView?.window) != nil){
-                if latestNoteView.noteName == 5{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-                    
-                }
-            }
-        case "F" :
-            if((latestNoteView?.window) != nil){
-                if latestNoteView.noteName == 6{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-                    
-                }
-            }
-        case "F#/Gb" :
-            if((latestNoteView?.window) != nil){
-                if latestNoteView.noteName == 7{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-                    
-                }
-            }
-        case "G" :
-            if((latestNoteView?.window) != nil){
-                if latestNoteView.noteName == 8{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-                    
-                }
-            }
-        case "G#/Ab" :
-            if (latestNoteView?.window != nil){
-                if latestNoteView.noteName == 9{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-                    
-                }
-            }
-        case "A" :
-            if((latestNoteView?.window) != nil){
-                if latestNoteView.noteName == 10{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-                    
-                }
-            }
-        case "A#/Bb" :
-            if (latestNoteView?.window != nil){
-                if latestNoteView.noteName == 11{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-                    
-                }
-            }
-        case "B" :
-            if((latestNoteView?.window) != nil){
-                if latestNoteView.noteName == 12{
-                    updatePoints()
-                    latestNoteView.removeFromSuperview()
-                    
-                }
-            }
+        case "C" : checkForCorrectNote(1)
+        case "C#/Db" :checkForCorrectNote(2)
+        case "D" : checkForCorrectNote(3)
+        case "D#/Eb" : checkForCorrectNote(4)
+        case "E" : checkForCorrectNote(5)
+        case "F" : checkForCorrectNote(6)
+        case "F#/Gb" : checkForCorrectNote(7)
+        case "G" : checkForCorrectNote(8)
+        case "G#/Ab" : checkForCorrectNote(9)
+        case "A" : checkForCorrectNote(10)
+        case "A#/Bb" : checkForCorrectNote(11)
+        case "B" :checkForCorrectNote(12)
         default: break
         }
         
     }
+    
+    lazy var animator: UIDynamicAnimator = {let lazilyCreatedUIDynamicAnimator = UIDynamicAnimator(referenceView: self.mainView)
+        return lazilyCreatedUIDynamicAnimator
+        }()
     var pointsInt: Int = 0
     var noteScoreInt: Int = 0
-    
     var currentGameManager: GameManager? = nil
-
     var betweenLevelTextLabel : UILabel?
-    
+    let gravity = UIGravityBehavior()
     weak var latestNoteView: NoteView!
 
     @IBOutlet weak var noteScore: UILabel!
@@ -262,6 +198,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var altoButton: UIButton!
     @IBOutlet weak var numberOfPoints: UILabel!
     @IBOutlet weak var mainView: UIView!
+    @IBOutlet weak var gameView: UIView!
     
     @IBOutlet weak var buttonC: UIButton!
     @IBOutlet weak var buttonD: UIButton!
@@ -277,8 +214,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var buttonGsharp: UIButton!
     
     @IBOutlet weak var mainText: UILabel!
-    
-    @IBOutlet weak var gameView: UIView!
     
     @IBOutlet weak var startButton: UIButton!
     
