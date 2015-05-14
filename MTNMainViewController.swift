@@ -153,7 +153,7 @@ class ViewController: UIViewController {
     @IBAction func chooseInstrument(sender: AnyObject) {
         
         
-        self.currentGameManager = GameManager(levelNumber: 1, instrument: (sender.currentTitle!)!)
+        self.currentGameManager = GameManager(levelNumber: 9, instrument: (sender.currentTitle!)!)
         startButton.hidden = false
         trumpetButton.removeFromSuperview()
         altoButton.removeFromSuperview()
