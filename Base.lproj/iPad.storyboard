@@ -39,6 +39,12 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Current Level" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2rz-tG-XrG">
+                                <rect key="frame" x="249" y="49" width="103" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="245" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="snQ-Hr-4vo">
                                 <rect key="frame" x="16" y="518" width="36" height="72"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -222,9 +228,9 @@
                                 <rect key="frame" x="-16" y="79" width="616" height="382"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Erj-m0-ALg">
-                                        <rect key="frame" x="175" y="207" width="251" height="55"/>
+                                        <rect key="frame" x="140" y="207" width="321" height="55"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="36"/>
-                                        <state key="normal" title="Alto Saxophone">
+                                        <state key="normal" title="Baritone Saxophone">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -241,13 +247,29 @@
                                             <action selector="chooseInstrument:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4Zd-UQ-uoE"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Level 1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wrO-Lv-eQ1">
+                                        <rect key="frame" x="198" y="126" width="55" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="1" minimumValue="1" maximumValue="9" translatesAutoresizingMaskIntoConstraints="NO" id="b8T-uB-gE6">
+                                        <rect key="frame" x="332" y="126" width="94" height="29"/>
+                                        <connections>
+                                            <action selector="userChangedLevel:" destination="BYZ-38-t0r" eventType="valueChanged" id="IGB-WU-IxY"/>
+                                        </connections>
+                                    </stepper>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="b8T-uB-gE6" secondAttribute="centerX" constant="-71" id="TfM-SS-wjf"/>
+                                    <constraint firstAttribute="centerX" secondItem="wrO-Lv-eQ1" secondAttribute="centerX" constant="82.5" id="fwe-Dt-fpa"/>
                                     <constraint firstAttribute="centerY" secondItem="9od-R3-kCi" secondAttribute="centerY" constant="0.5" id="iXB-T0-le0"/>
+                                    <constraint firstItem="b8T-uB-gE6" firstAttribute="top" secondItem="wrO-Lv-eQ1" secondAttribute="bottom" constant="-21" id="ih7-Zh-Jab"/>
                                     <constraint firstAttribute="centerX" secondItem="Erj-m0-ALg" secondAttribute="centerX" constant="-0.5" id="msV-an-Pn4"/>
                                     <constraint firstAttribute="centerX" secondItem="9od-R3-kCi" secondAttribute="centerX" id="pCZ-dE-Ec7"/>
                                     <constraint firstItem="Erj-m0-ALg" firstAttribute="top" secondItem="9od-R3-kCi" secondAttribute="top" constant="44" id="r4w-YS-7c6"/>
+                                    <constraint firstItem="b8T-uB-gE6" firstAttribute="bottom" secondItem="9od-R3-kCi" secondAttribute="bottom" constant="-63" id="tOn-dh-4os"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -278,6 +300,7 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="QDn-og-PmY" secondAttribute="bottom" constant="8" id="Ad3-DN-wwe"/>
                             <constraint firstItem="snQ-Hr-4vo" firstAttribute="bottom" secondItem="v09-gv-T6l" secondAttribute="bottom" id="Aez-2W-5kC"/>
                             <constraint firstItem="7HX-I9-lco" firstAttribute="leading" secondItem="snQ-Hr-4vo" secondAttribute="leading" id="At9-LS-s9X"/>
+                            <constraint firstItem="2rz-tG-XrG" firstAttribute="bottom" secondItem="QGO-ph-COU" secondAttribute="bottom" constant="29" id="BQc-wQ-yYd"/>
                             <constraint firstItem="EeT-cx-xgk" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="130" id="BeW-Ul-Qf8"/>
                             <constraint firstAttribute="trailing" secondItem="zew-Vw-Dl0" secondAttribute="trailing" constant="81" id="Cka-rA-vD6"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="qCt-nN-nKt" secondAttribute="bottom" constant="8" id="D1O-f5-LDX"/>
@@ -309,6 +332,7 @@
                             <constraint firstItem="zFe-kc-smK" firstAttribute="trailing" secondItem="rFM-3Y-0aB" secondAttribute="trailing" constant="-50" id="Rxi-yy-WlL"/>
                             <constraint firstItem="zFe-kc-smK" firstAttribute="leading" secondItem="rFM-3Y-0aB" secondAttribute="leading" constant="-146" id="SfO-Fx-dpW"/>
                             <constraint firstItem="snQ-Hr-4vo" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Sgg-eN-DVW"/>
+                            <constraint firstItem="2rz-tG-XrG" firstAttribute="centerX" secondItem="QGO-ph-COU" secondAttribute="centerX" id="TwU-E1-lqF"/>
                             <constraint firstItem="1ID-Ds-Caw" firstAttribute="bottom" secondItem="H7v-g7-3ST" secondAttribute="bottom" id="UQk-ck-SFx"/>
                             <constraint firstItem="qCt-nN-nKt" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zFe-kc-smK" secondAttribute="trailing" constant="50" id="Wtw-XG-9M9"/>
                             <constraint firstItem="qCt-nN-nKt" firstAttribute="trailing" secondItem="zFe-kc-smK" secondAttribute="trailing" constant="-114" id="XfQ-CL-h4M"/>
@@ -448,8 +472,10 @@
                         <outlet property="buttonFsharp" destination="rFM-3Y-0aB" id="Ojm-hP-dZw"/>
                         <outlet property="buttonG" destination="QDn-og-PmY" id="6vO-Ff-ywe"/>
                         <outlet property="buttonGsharp" destination="b5l-TF-gjI" id="vJX-Lr-bP2"/>
+                        <outlet property="currentLevelLabel" destination="2rz-tG-XrG" id="2SJ-KQ-mvo"/>
                         <outlet property="gameView" destination="P9N-fl-xs6" id="Naz-4o-3Bs"/>
-                        <outlet property="mainText" destination="QGO-ph-COU" id="0qf-RO-zel"/>
+                        <outlet property="levelChooserLabel" destination="wrO-Lv-eQ1" id="r4m-zk-xZm"/>
+                        <outlet property="levelChooserStepper" destination="b8T-uB-gE6" id="K98-Mn-FcZ"/>
                         <outlet property="mainView" destination="8bC-Xf-vdC" id="gQi-na-wQK"/>
                         <outlet property="noteScore" destination="QGO-ph-COU" id="1lX-ae-CIV"/>
                         <outlet property="numberOfPoints" destination="hM2-iJ-r0f" id="mJQ-Zf-fZ7"/>

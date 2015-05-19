@@ -10,7 +10,16 @@ import Foundation
 
 enum Inst {
     case Trumpet
+    case BaritoneTreble
     case AltoSaxophone
+    case Flute
+    case Oboe
+    case Clarinet
+    case BassClarinet
+    case AltoClarinet
+    case TenorSaxophone
+    case BaritoneSaxophone
+    case Percussion
     case Empty
 
 }

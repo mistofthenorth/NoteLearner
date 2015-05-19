@@ -17,12 +17,19 @@ class ViewController: UIViewController {
         startButton.hidden = true
         
         setButtonLayout()
+        //levelChooserStepper?.stepValue = 1.0
+        println(levelChooserStepper?.value)
         
     }
 
     override func viewDidAppear(animated: Bool) {
         animator.addBehavior(gravity)
 
+    }
+    @IBAction func userChangedLevel(sender: UIStepper) {
+        println("The User has Changed the Level to  \(sender.value)")
+        let newLevelValue : Int = Int(sender.value)
+        levelChooserLabel.text = "Level \(newLevelValue)"
     }
     
     
@@ -48,7 +55,7 @@ class ViewController: UIViewController {
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
             println("Check it out, new code for iPhone only")
             let buttonRowConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[buttonC(==buttonD)]-[buttonD(==buttonC)]-[buttonE(==buttonC)]-[buttonF(==buttonC)]-[buttonG(==buttonC)]-[buttonA(==buttonC)]-[buttonB(==buttonC)]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary)
-            let sharpsAndFlatsConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-25-[buttonCsharp]-[buttonDsharp(==buttonCsharp)]-35-[buttonFsharp(==buttonCsharp)]-[buttonGsharp(==buttonCsharp)]-[buttonAsharp(==buttonCsharp)]-25-|", options: NSLayoutFormatOptions(0), metrics: nil, views: sharpsAndFlatsDictionary)
+            let sharpsAndFlatsConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-45-[buttonCsharp]-[buttonDsharp(==buttonCsharp)]-35-[buttonFsharp(==buttonCsharp)]-[buttonGsharp(==buttonCsharp)]-[buttonAsharp(==buttonCsharp)]-35-|", options: NSLayoutFormatOptions(0), metrics: nil, views: sharpsAndFlatsDictionary)
             
             view.addConstraints(sharpsAndFlatsConstraint)
             view.addConstraints(buttonRowConstraint)
@@ -70,7 +77,7 @@ class ViewController: UIViewController {
     
     func randomChooser(){
         noteScoreInt++
-        noteScore.text = "\(noteScoreInt)/15"
+        noteScore.text = "\(noteScoreInt)/15 \n"
         
         latestNoteView?.removeFromSuperview()
         var getNewNote = currentGameManager?.note()
@@ -111,7 +118,6 @@ class ViewController: UIViewController {
     func startMoving(){
 //      Use this function for code after pushing start
         
-        noteScore.text = "0/15"
         noteScoreInt = 0
         betweenLevelTextLabel?.removeFromSuperview()
         startButton.hidden = true
@@ -152,11 +158,15 @@ class ViewController: UIViewController {
     
     @IBAction func chooseInstrument(sender: AnyObject) {
         
-        
-        self.currentGameManager = GameManager(levelNumber: 9, instrument: (sender.currentTitle!)!)
+        self.currentGameManager = GameManager(levelNumber: Int(levelChooserStepper.value), instrument: (sender.currentTitle!)!)
         startButton.hidden = false
         trumpetButton.removeFromSuperview()
         altoButton.removeFromSuperview()
+        levelChooserStepper.removeFromSuperview()
+        
+        levelChooserLabel.removeFromSuperview()
+        
+        currentLevelLabel.text = "Level \(Int(levelChooserStepper.value))" + " \((sender.currentTitle!)!)"
     }
 
     
@@ -183,6 +193,8 @@ class ViewController: UIViewController {
         
     }
     
+    
+    
     lazy var animator: UIDynamicAnimator = {let lazilyCreatedUIDynamicAnimator = UIDynamicAnimator(referenceView: self.mainView)
         return lazilyCreatedUIDynamicAnimator
         }()
@@ -199,6 +211,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var numberOfPoints: UILabel!
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var gameView: UIView!
+    @IBOutlet weak var currentLevelLabel: UILabel!
+    
+    @IBOutlet weak var levelChooserLabel: UILabel!
+    @IBOutlet weak var levelChooserStepper: UIStepper!
     
     @IBOutlet weak var buttonC: UIButton!
     @IBOutlet weak var buttonD: UIButton!
@@ -213,7 +229,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var buttonAsharp: UIButton!
     @IBOutlet weak var buttonGsharp: UIButton!
     
-    @IBOutlet weak var mainText: UILabel!
     
     @IBOutlet weak var startButton: UIButton!
     
