@@ -31,6 +31,30 @@ class ViewController: UIViewController {
         let newLevelValue : Int = Int(sender.value)
         levelChooserLabel.text = "Level \(newLevelValue)"
     }
+
+    @IBAction func userChangedInstrument(sender: UIStepper) {
+        println("The User has Changed the Instrument to ")
+        switch sender.value {
+        case 1: instrumentChooserLabel?.text = "Baritone Treble"
+        case 2: instrumentChooserLabel?.text = "Trumpet"
+        case 3: instrumentChooserLabel?.text = "Alto Saxophone"
+        case 4: instrumentChooserLabel?.text = "Tenor Saxophone"
+        case 5: instrumentChooserLabel?.text = "Baritone Saxophone"
+        case 6: instrumentChooserLabel?.text = "Flute"
+        case 7: instrumentChooserLabel?.text = "Oboe"
+        case 8: instrumentChooserLabel?.text = "Clarinet"
+        case 9: instrumentChooserLabel?.text = "Bass Clarinet"
+        case 10: instrumentChooserLabel?.text = "Alto Clarinet"
+        case 11: instrumentChooserLabel?.text = "Percussion"
+        case 12: instrumentChooserLabel?.text = "Trombone"
+        case 13: instrumentChooserLabel?.text = "Baritone Bass"
+        case 14: instrumentChooserLabel?.text = "Bassoon"
+        case 15: instrumentChooserLabel?.text = "Electric Bass"
+        case 16: instrumentChooserLabel?.text = "Tuba"
+        default: break
+        }
+        startButton.hidden = false
+    }
     
     
     func setButtonLayout(){
@@ -100,17 +124,23 @@ class ViewController: UIViewController {
         }
 
     func newLevel(){
-        mainView.alpha = 0.5
+        //mainView.alpha = 0.5
+//        currentGameManager?.instrumentType?.level = 2
+//        
+//        betweenLevelTextLabel = UILabel(frame: CGRectMake(0, 0, 200, 21))
+//        let xFloat: CGFloat = CGRectGetMaxX(mainView.frame)/2
+//        let yFloat: CGFloat = CGRectGetMaxY(mainView.frame)/2
+//        betweenLevelTextLabel?.center = CGPointMake(xFloat,yFloat)
+//        betweenLevelTextLabel?.textAlignment = NSTextAlignment.Center
+//        betweenLevelTextLabel?.text = "Hit Start to Begin Level 2"
+//        view.addSubview(betweenLevelTextLabel!)
+        levelChooserLabel.hidden = false
+        levelChooserStepper.hidden = false
+        instrumentChooserStepper.hidden = false
+        instrumentChooserLabel.hidden = false
         startButton.hidden = false
-        currentGameManager?.instrumentType?.level = 2
         
-        betweenLevelTextLabel = UILabel(frame: CGRectMake(0, 0, 200, 21))
-        let xFloat: CGFloat = CGRectGetMaxX(mainView.frame)/2
-        let yFloat: CGFloat = CGRectGetMaxY(mainView.frame)/2
-        betweenLevelTextLabel?.center = CGPointMake(xFloat,yFloat)
-        betweenLevelTextLabel?.textAlignment = NSTextAlignment.Center
-        betweenLevelTextLabel?.text = "Hit Start to Begin Level 2"
-        view.addSubview(betweenLevelTextLabel!)
+        
     }
     
 
@@ -119,7 +149,7 @@ class ViewController: UIViewController {
 //      Use this function for code after pushing start
         
         noteScoreInt = 0
-        betweenLevelTextLabel?.removeFromSuperview()
+        //betweenLevelTextLabel?.removeFromSuperview()
         startButton.hidden = true
         mainView.alpha = 1
 
@@ -135,7 +165,7 @@ class ViewController: UIViewController {
     }
     func checkForCorrectNote (intRepresentingNote: Int){
         if (latestNoteView?.window != nil){
-            if latestNoteView.noteName == intRepresentingNote{
+            if latestNoteView?.noteName == intRepresentingNote{
                 addPoints()
                 latestNoteView.removeFromSuperview()
             }
@@ -153,20 +183,22 @@ class ViewController: UIViewController {
     
     @IBAction func newNote() {
         startMoving()
+        chooseInstrument()
         randomChooser()
     }
     
-    @IBAction func chooseInstrument(sender: AnyObject) {
+    func chooseInstrument() {
         
-        self.currentGameManager = GameManager(levelNumber: Int(levelChooserStepper.value), instrument: (sender.currentTitle!)!)
-        startButton.hidden = false
-        trumpetButton.removeFromSuperview()
-        altoButton.removeFromSuperview()
-        levelChooserStepper.removeFromSuperview()
+        self.currentGameManager = GameManager(levelNumber: Int(levelChooserStepper.value), instrument: (instrumentChooserLabel.text)!)
+        //startButton.hidden = false
+        //trumpetButton.removeFromSuperview()
+        //altoButton.removeFromSuperview()
+        levelChooserStepper.hidden = true
+        levelChooserLabel.hidden = true
+        instrumentChooserLabel.hidden = true
+        instrumentChooserStepper.hidden = true
         
-        levelChooserLabel.removeFromSuperview()
-        
-        currentLevelLabel.text = "Level \(Int(levelChooserStepper.value))" + " \((sender.currentTitle!)!)"
+        currentLevelLabel.text = "Level \(Int(levelChooserStepper.value))" + " - \((instrumentChooserLabel.text)!)"
     }
 
     
@@ -215,6 +247,8 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var levelChooserLabel: UILabel!
     @IBOutlet weak var levelChooserStepper: UIStepper!
+    @IBOutlet weak var instrumentChooserStepper: UIStepper!
+    @IBOutlet weak var instrumentChooserLabel: UILabel!
     
     @IBOutlet weak var buttonC: UIButton!
     @IBOutlet weak var buttonD: UIButton!

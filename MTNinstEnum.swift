@@ -20,6 +20,11 @@ enum Inst {
     case TenorSaxophone
     case BaritoneSaxophone
     case Percussion
+    case Trombone
+    case BaritoneBass
+    case Bassoon
+    case ElectricBass
+    case Tuba
     case Empty
 
 }
