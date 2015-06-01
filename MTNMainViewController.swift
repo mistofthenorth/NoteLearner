@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreData
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,9 +18,28 @@ class ViewController: UIViewController {
         startButton.hidden = true
         
         setButtonLayout()
-        //levelChooserStepper?.stepValue = 1.0
-        println(levelChooserStepper?.value)
+//        levelChooserStepper?.stepValue = 1.0
+//        println(levelChooserStepper?.value)
+        let standardDefaults = NSUserDefaults.standardUserDefaults()
+        println(standardDefaults.valueForKey("Latest High Score"))
         
+//        let entity = NSEntityDescription.entityForName("HighScore", inManagedObjectContext: viewControllersManagedObjectContext!)
+//        let fakeHighScore = HighScore(entity: entity!, insertIntoManagedObjectContext: viewControllersManagedObjectContext!)
+//        fakeHighScore.level = 1
+//        fakeHighScore.instrument = "Trumpet"
+//        fakeHighScore.score = 490
+//        fakeHighScore.dateOfScore = NSDate()
+//        
+//        let check = viewControllersManagedObjectContext?.save(NSErrorPointer())
+//        println(check)
+//        println(fakeHighScore)
+        
+//        let request = NSFetchRequest(entityName: "HighScore")
+//        let fetchedObject = viewControllersManagedObjectContext?.executeFetchRequest(request, error: NSErrorPointer())
+//        println(fetchedObject)
+        
+        
+    
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -112,7 +132,9 @@ class ViewController: UIViewController {
         latestNoteView.frame = CGRectMake(CGRectGetMaxX(gameView.frame)-1, CGFloat(yPosition), 257, 120)
         gameView.addSubview(latestNoteView)
         gravity.addItem(latestNoteView)
+        startTime = CFAbsoluteTimeGetCurrent()
         
+        // your long procedure
         
         if (noteScoreInt < 15){
             var aDelay = NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector:Selector("randomChooser"), userInfo: nil, repeats: false)
@@ -123,27 +145,72 @@ class ViewController: UIViewController {
 
         }
 
+    
+    
+    func saveScore(){
+        let context = UIApplication.sharedApplication().delegate as! AppDelegate!
+        let highScoreManagedObjectContext = context.managedObjectContext
+        
+        let entity = NSEntityDescription.entityForName("HighScore", inManagedObjectContext: highScoreManagedObjectContext!)
+        let newHighScore = HighScore(entity: entity!, insertIntoManagedObjectContext: highScoreManagedObjectContext!)
+        newHighScore.level = currentGameManager!.instrumentType!.level
+        newHighScore.instrument = currentGameManager!.instrumentType!.instrumentType.rawValue
+        newHighScore.score = pointsInt
+        newHighScore.dateOfScore = NSDate()
+        
+        let check = highScoreManagedObjectContext!.save(NSErrorPointer())
+        println(check)
+    
+    
+    }
+    
+    func removeViewWithTap(viewToRemove: UIView){
+        if currentTapGesture?.state == UIGestureRecognizerState.Ended{
+            viewToRemove.removeFromSuperview()
+            }
+        println("The recognizer is running the method removeViewWithTap")
+        }
+    
+    func handleTap(recognizer: UIGestureRecognizer){
+        println("Nice Tap bro")
+        levelCompleteScoreView?.removeFromSuperview()
+        
+    
+    }
+    
     func newLevel(){
-        //mainView.alpha = 0.5
-//        currentGameManager?.instrumentType?.level = 2
-//        
-//        betweenLevelTextLabel = UILabel(frame: CGRectMake(0, 0, 200, 21))
-//        let xFloat: CGFloat = CGRectGetMaxX(mainView.frame)/2
-//        let yFloat: CGFloat = CGRectGetMaxY(mainView.frame)/2
-//        betweenLevelTextLabel?.center = CGPointMake(xFloat,yFloat)
-//        betweenLevelTextLabel?.textAlignment = NSTextAlignment.Center
-//        betweenLevelTextLabel?.text = "Hit Start to Begin Level 2"
-//        view.addSubview(betweenLevelTextLabel!)
+
+        saveScore()
+        
+        levelCompleteScoreView = UIView(frame: mainView.frame)
+        var xFloat: CGFloat = CGRectGetMaxX(gameView.frame)/2
+        var yFloat: CGFloat = CGRectGetMaxY(gameView.frame)/2
+        levelCompleteScoreView?.center = CGPoint(x: xFloat, y: yFloat)
+        levelCompleteScoreView?.backgroundColor = UIColor(white: 200, alpha: 0.8)
+        
+        currentTapGesture = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
+        currentTapGesture?.delegate = self
+        levelCompleteScoreView?.addGestureRecognizer(currentTapGesture!)
+        
+        gameView.addSubview(levelCompleteScoreView!)
+        
+        betweenLevelTextLabel = UILabel(frame: CGRectMake(0, 0, 200, 21))
+        xFloat = CGRectGetMaxX(gameView.frame)/2
+        yFloat = CGRectGetMaxY(gameView.frame)/2
+        betweenLevelTextLabel?.center = CGPointMake(xFloat,yFloat)
+        betweenLevelTextLabel?.textAlignment = NSTextAlignment.Center
+        betweenLevelTextLabel?.text = "You got \(pointsInt) points!"
+        levelCompleteScoreView?.addSubview(betweenLevelTextLabel!)
+        
+        
         levelChooserLabel.hidden = false
         levelChooserStepper.hidden = false
         instrumentChooserStepper.hidden = false
         instrumentChooserLabel.hidden = false
         startButton.hidden = false
         
-        
     }
     
-
     
     func startMoving(){
 //      Use this function for code after pushing start
@@ -156,8 +223,33 @@ class ViewController: UIViewController {
     }
     //The next three functions check for the correct note according to an int representing each note
     func addPoints(){
-        pointsInt += 100
+        endTime = CFAbsoluteTimeGetCurrent()
+        let elapsedTime = endTime! - startTime!
+
+        if elapsedTime < 2{
+            pointsInt += 100
+        }
+        
+        if elapsedTime>2 && elapsedTime<2.5 {
+            pointsInt += 80
+        }
+        if elapsedTime>2.5 && elapsedTime<3 {
+            pointsInt += 60
+        }
+        if elapsedTime>3 && elapsedTime<3.5 {
+            pointsInt += 40
+        }
+        if elapsedTime>3.5 {
+            pointsInt += 20
+        }
+        
+        
+        
+        //pointsInt += 100
         numberOfPoints.text = String(pointsInt)
+
+
+        //println("runtime is nanosecs : \(endTime! - startTime!)")
     }
     func subtractPoints(){
         pointsInt += -50
@@ -225,7 +317,9 @@ class ViewController: UIViewController {
         
     }
     
-    
+    @IBAction func unwindToMainVC(segue: UIStoryboardSegue) {
+        
+    }
     
     lazy var animator: UIDynamicAnimator = {let lazilyCreatedUIDynamicAnimator = UIDynamicAnimator(referenceView: self.mainView)
         return lazilyCreatedUIDynamicAnimator
@@ -234,9 +328,16 @@ class ViewController: UIViewController {
     var noteScoreInt: Int = 0
     var currentGameManager: GameManager? = nil
     var betweenLevelTextLabel : UILabel?
+    var currentTapGesture = UIGestureRecognizer?()
     let gravity = UIGravityBehavior()
     weak var latestNoteView: NoteView!
+    
+    var levelCompleteScoreView : UIView?
 
+    var startTime : CFAbsoluteTime?
+    var endTime: CFAbsoluteTime?
+    
+    
     @IBOutlet weak var noteScore: UILabel!
     @IBOutlet weak var trumpetButton: UIButton!
     @IBOutlet weak var altoButton: UIButton!
@@ -262,7 +363,6 @@ class ViewController: UIViewController {
     @IBOutlet weak var buttonDsharp: UIButton!
     @IBOutlet weak var buttonAsharp: UIButton!
     @IBOutlet weak var buttonGsharp: UIButton!
-    
     
     @IBOutlet weak var startButton: UIButton!
     

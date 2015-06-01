@@ -8,23 +8,23 @@
 
 import Foundation
 
-enum Inst {
-    case Trumpet
-    case BaritoneTreble
-    case AltoSaxophone
-    case Flute
-    case Oboe
-    case Clarinet
-    case BassClarinet
-    case AltoClarinet
-    case TenorSaxophone
-    case BaritoneSaxophone
-    case Percussion
-    case Trombone
-    case BaritoneBass
-    case Bassoon
-    case ElectricBass
-    case Tuba
-    case Empty
+enum Inst : String {
+    case Trumpet = "Trumpet"
+    case BaritoneTreble = "Baritone Treble"
+    case AltoSaxophone = "Alto Saxophone"
+    case Flute = "Flute"
+    case Oboe = "Oboe"
+    case Clarinet = "Clarinet"
+    case BassClarinet = "Bass Clarinet"
+    case AltoClarinet = "Alto Clarinet"
+    case TenorSaxophone = "Tenor Saxophone"
+    case BaritoneSaxophone = "Baritone Saxophone"
+    case Percussion = "Percussion"
+    case Trombone = "Trombone"
+    case BaritoneBass = "Baritone Bass"
+    case Bassoon = "Bassoon"
+    case ElectricBass = "Electric Bass"
+    case Tuba = "Tuba"
+    case Empty = "Empty"
 
 }
