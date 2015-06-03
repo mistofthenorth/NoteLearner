@@ -216,41 +216,56 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 //      Use this function for code after pushing start
         
         noteScoreInt = 0
-        //betweenLevelTextLabel?.removeFromSuperview()
         startButton.hidden = true
         mainView.alpha = 1
 
     }
     //The next three functions check for the correct note according to an int representing each note
-    func addPoints(){
+    func addPointsWithAnimation(){
         endTime = CFAbsoluteTimeGetCurrent()
         let elapsedTime = endTime! - startTime!
 
-        if elapsedTime < 2{
-            pointsInt += 100
-        }
+        var pointsScored = Int()
         
-        if elapsedTime>2 && elapsedTime<2.5 {
-            pointsInt += 80
+        if elapsedTime < 2.1{
+            pointsScored = 100
         }
-        if elapsedTime>2.5 && elapsedTime<3 {
-            pointsInt += 60
+        if elapsedTime>2.1 && elapsedTime<2.7 {
+            pointsScored = 80
         }
-        if elapsedTime>3 && elapsedTime<3.5 {
-            pointsInt += 40
+        if elapsedTime>2.7 && elapsedTime<3.3 {
+            pointsScored = 60
         }
-        if elapsedTime>3.5 {
-            pointsInt += 20
+        if elapsedTime>3.3 && elapsedTime<3.7 {
+            pointsScored = 40
         }
-        
-        
-        
-        //pointsInt += 100
+        if elapsedTime>3.7 {
+            pointsScored = 20
+        }
+        let pointLabel = UILabel(frame: latestNoteView.frame)
+        pointLabel.textAlignment = NSTextAlignment.Center
+        pointLabel.font = UIFont.systemFontOfSize(24)
+        pointLabel.text = String(pointsScored)
+        let pointLabelEndPosition = CGRectMake(pointLabel.frame.minX, pointLabel.frame.minY-60, pointLabel.frame.width, pointLabel.frame.height)
+        gameView.addSubview(pointLabel)
+        UIView.animateWithDuration(1.5, animations: {pointLabel.alpha = 0; pointLabel.frame = pointLabelEndPosition})
+
+        pointsInt += pointsScored
         numberOfPoints.text = String(pointsInt)
 
-
-        //println("runtime is nanosecs : \(endTime! - startTime!)")
     }
+    
+    func animateNoteDisappear(){
+        gravity.removeItem(latestNoteView!)
+        UIView.animateWithDuration(0.5, animations: {self.latestNoteView?.alpha = 0; self.latestNoteView?.frame = CGRectMake(self.latestNoteView!.frame.midX, self.latestNoteView!.frame.midY+50, 0, 0)})
+        let removeNoteFromSuperview = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: Selector("removeTheNoteFromTheSuperview"), userInfo: nil, repeats: false)
+        
+    }
+    
+    func removeTheNoteFromTheSuperview(){
+        latestNoteView?.removeFromSuperview()
+    }
+    
     func subtractPoints(){
         pointsInt += -50
         numberOfPoints.text = String(pointsInt)
@@ -258,8 +273,12 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     func checkForCorrectNote (intRepresentingNote: Int){
         if (latestNoteView?.window != nil){
             if latestNoteView?.noteName == intRepresentingNote{
-                addPoints()
-                latestNoteView.removeFromSuperview()
+                //Check if the button hasn't been pushed already
+                if(latestNoteView?.alpha == 1){
+                addPointsWithAnimation()
+                animateNoteDisappear()
+                }
+                //latestNoteView.removeFromSuperview()
             }
             else
             {
