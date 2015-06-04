@@ -66,11 +66,12 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         case 9: instrumentChooserLabel?.text = "Bass Clarinet"
         case 10: instrumentChooserLabel?.text = "Alto Clarinet"
         case 11: instrumentChooserLabel?.text = "Percussion"
-        case 12: instrumentChooserLabel?.text = "Trombone"
-        case 13: instrumentChooserLabel?.text = "Baritone Bass"
-        case 14: instrumentChooserLabel?.text = "Bassoon"
-        case 15: instrumentChooserLabel?.text = "Electric Bass"
-        case 16: instrumentChooserLabel?.text = "Tuba"
+        case 12: instrumentChooserLabel?.text = "French Horn"
+        case 13: instrumentChooserLabel?.text = "Trombone"
+        case 14: instrumentChooserLabel?.text = "Baritone Bass"
+        case 15: instrumentChooserLabel?.text = "Bassoon"
+        case 16: instrumentChooserLabel?.text = "Electric Bass"
+        case 17: instrumentChooserLabel?.text = "Tuba"
         default: break
         }
         startButton.hidden = false
@@ -214,8 +215,9 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func startMoving(){
 //      Use this function for code after pushing start
-        
         noteScoreInt = 0
+        pointsInt = 0
+        numberOfPoints.text = String(pointsInt)
         startButton.hidden = true
         mainView.alpha = 1
 
@@ -246,25 +248,24 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         pointLabel.textAlignment = NSTextAlignment.Center
         pointLabel.font = UIFont.systemFontOfSize(24)
         pointLabel.text = String(pointsScored)
-        let pointLabelEndPosition = CGRectMake(pointLabel.frame.minX, pointLabel.frame.minY-60, pointLabel.frame.width, pointLabel.frame.height)
+        pointLabel.alpha = 0
+        let pointLabelEndPosition = CGRectMake(pointLabel.frame.minX, pointLabel.frame.minY-30, pointLabel.frame.width, pointLabel.frame.height)
         gameView.addSubview(pointLabel)
-        UIView.animateWithDuration(1.5, animations: {pointLabel.alpha = 0; pointLabel.frame = pointLabelEndPosition})
-
-        pointsInt += pointsScored
-        numberOfPoints.text = String(pointsInt)
+        
+        UIView.animateWithDuration(1.2, delay: 0, options: nil, animations: {pointLabel.alpha = 1; pointLabel.frame = pointLabelEndPosition}, completion: {complete in pointLabel.removeFromSuperview(); self.pointsInt += pointsScored; self.numberOfPoints.text = String(self.pointsInt)})
+        //UIView.animateWithDuration(1.5, animations: {pointLabel.alpha = 0; pointLabel.frame = pointLabelEndPosition})
+        //pointsInt += pointsScored
+        //numberOfPoints.text = String(pointsInt)
 
     }
+    
     
     func animateNoteDisappear(){
         gravity.removeItem(latestNoteView!)
-        UIView.animateWithDuration(0.5, animations: {self.latestNoteView?.alpha = 0; self.latestNoteView?.frame = CGRectMake(self.latestNoteView!.frame.midX, self.latestNoteView!.frame.midY+50, 0, 0)})
-        let removeNoteFromSuperview = NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: Selector("removeTheNoteFromTheSuperview"), userInfo: nil, repeats: false)
+        UIView.animateWithDuration(0.5, delay: 0, options: nil, animations: {self.latestNoteView?.alpha = 0; self.latestNoteView?.frame = CGRectMake(self.latestNoteView!.frame.midX, self.latestNoteView!.frame.midY+50, 0, 0)}, completion: {complete in self.latestNoteView?.removeFromSuperview()})
         
     }
     
-    func removeTheNoteFromTheSuperview(){
-        latestNoteView?.removeFromSuperview()
-    }
     
     func subtractPoints(){
         pointsInt += -50
@@ -278,7 +279,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
                 addPointsWithAnimation()
                 animateNoteDisappear()
                 }
-                //latestNoteView.removeFromSuperview()
             }
             else
             {

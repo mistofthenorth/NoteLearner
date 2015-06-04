@@ -20,6 +20,7 @@ enum Inst : String {
     case TenorSaxophone = "Tenor Saxophone"
     case BaritoneSaxophone = "Baritone Saxophone"
     case Percussion = "Percussion"
+    case FrenchHorn = "French Horn"
     case Trombone = "Trombone"
     case BaritoneBass = "Baritone Bass"
     case Bassoon = "Bassoon"

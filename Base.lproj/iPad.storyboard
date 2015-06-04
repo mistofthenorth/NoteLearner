@@ -242,7 +242,7 @@
                                             <action selector="userChangedLevel:" destination="BYZ-38-t0r" eventType="valueChanged" id="IGB-WU-IxY"/>
                                         </connections>
                                     </stepper>
-                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" wraps="YES" value="1" minimumValue="1" maximumValue="16" translatesAutoresizingMaskIntoConstraints="NO" id="m67-Ep-hcf">
+                                    <stepper opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" wraps="YES" value="1" minimumValue="1" maximumValue="17" translatesAutoresizingMaskIntoConstraints="NO" id="m67-Ep-hcf">
                                         <rect key="frame" x="332" y="176" width="94" height="29"/>
                                         <connections>
                                             <action selector="userChangedInstrument:" destination="BYZ-38-t0r" eventType="valueChanged" id="me4-T0-0gF"/>
