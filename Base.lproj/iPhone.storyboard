@@ -255,12 +255,6 @@
                                             <action selector="userChangedLevel:" destination="7JE-2a-wLO" eventType="valueChanged" id="xQ0-VF-KHc"/>
                                         </connections>
                                     </stepper>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Level 1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5NP-dT-GtC">
-                                        <rect key="frame" x="205" y="67" width="55" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Choose an Instrument" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9fY-nE-zgM">
                                         <rect key="frame" x="90" y="163" width="170" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -273,6 +267,12 @@
                                             <action selector="userChangedInstrument:" destination="7JE-2a-wLO" eventType="valueChanged" id="Rkf-z8-lhX"/>
                                         </connections>
                                     </stepper>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Level 1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5NP-dT-GtC">
+                                        <rect key="frame" x="148" y="67" width="55" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -282,7 +282,7 @@
                                     <constraint firstItem="sse-Oz-DP1" firstAttribute="centerY" secondItem="9fY-nE-zgM" secondAttribute="centerY" id="fFD-t2-EuY"/>
                                     <constraint firstItem="5NP-dT-GtC" firstAttribute="centerY" secondItem="kpD-VN-3ML" secondAttribute="centerY" id="nFQ-tW-eth"/>
                                     <constraint firstAttribute="centerY" secondItem="9fY-nE-zgM" secondAttribute="centerY" constant="5" id="pk9-Nh-8b5"/>
-                                    <constraint firstAttribute="centerX" secondItem="5NP-dT-GtC" secondAttribute="centerX" constant="67.5" id="yzG-Mm-vVs"/>
+                                    <constraint firstAttribute="centerX" secondItem="5NP-dT-GtC" secondAttribute="centerX" constant="120" id="yzG-Mm-vVs"/>
                                     <constraint firstItem="sse-Oz-DP1" firstAttribute="centerX" secondItem="kpD-VN-3ML" secondAttribute="centerX" id="zTq-PZ-zao"/>
                                 </constraints>
                             </view>
@@ -385,7 +385,7 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ywg-QU-PaA">
                                 <rect key="frame" x="279" y="28" width="42" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wc6-sb-nXC">

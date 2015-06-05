@@ -10,6 +10,9 @@ import UIKit
 
 class Instrument {
     
+    var instrumentType: Inst
+    var level : Int
+    
     init(instrument: String, setLevel: Int){
         switch instrument{
         case "Trumpet" : instrumentType = .Trumpet
@@ -806,9 +809,7 @@ class Instrument {
         return noteArray
     }
     
-    var describe = "This is part of the Instrument Class"
-    var instrumentType: Inst
-    var level : Int
+
     
     
 }

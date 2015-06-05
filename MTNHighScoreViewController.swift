@@ -10,7 +10,10 @@ import UIKit
 import CoreData
 
 class HighScoreViewController: UIViewController {
-
+    
+    private var highScoreManagedObjectContext : NSManagedObjectContext?
+    private var scoresString : String = ""
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -20,27 +23,20 @@ class HighScoreViewController: UIViewController {
         let request = NSFetchRequest(entityName: "HighScore")
         let fetchedObject = highScoreManagedObjectContext?.executeFetchRequest(request, error: NSErrorPointer())
         
-        println(fetchedObject?.count)
+        //println(fetchedObject?.count)
         
-        //let newHighScore = fetchedObject?[5] as! HighScore
-        //println(newHighScore.instrument)
-        var i = 0
-    
-        for i ; i<fetchedObject!.count; ++i{
+    //Iterate through the fetched objects and add them to the high score label
+        
+        for var i=0 ; i<fetchedObject!.count; ++i{
             var newScore = fetchedObject![i] as! HighScore
             scoresString = scoresString + "\(newScore.instrument) - Level = \(newScore.level) - Score - \(newScore.score) \n"
             highScoreLabel.text = scoresString
             println(highScoreLabel.text)
-        
         }
-        
-        
-        
     }
     
     
     @IBOutlet weak var highScoreLabel: UILabel!
-    var highScoreManagedObjectContext : NSManagedObjectContext?
-    var scoresString : String = ""
+
     
 }

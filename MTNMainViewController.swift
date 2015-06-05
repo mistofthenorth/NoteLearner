@@ -11,17 +11,30 @@ import CoreData
 
 class ViewController: UIViewController, UIGestureRecognizerDelegate {
 
+    lazy var animator: UIDynamicAnimator = {let lazilyCreatedUIDynamicAnimator = UIDynamicAnimator(referenceView: self.mainView)
+        return lazilyCreatedUIDynamicAnimator
+        }()
+    var pointsInt: Int = 0
+    var noteScoreInt: Int = 0
+    var currentGameManager: GameManager? = nil
+    var betweenLevelTextLabel : UILabel?
+    var currentTapGesture = UIGestureRecognizer?()
+    let gravity = UIGravityBehavior()
+    weak var latestNoteView: NoteView!
+    
+    var levelCompleteScoreView : UIView?
+    
+    var startTime : CFAbsoluteTime?
+    var endTime: CFAbsoluteTime?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        gravity.magnitude = 0.2
-        gravity.angle = 3.142
+        //gravity.magnitude = 0.2
         startButton.hidden = true
         
         setButtonLayout()
-//        levelChooserStepper?.stepValue = 1.0
-//        println(levelChooserStepper?.value)
-        let standardDefaults = NSUserDefaults.standardUserDefaults()
-        println(standardDefaults.valueForKey("Latest High Score"))
+        
+        //Code for building a fake score to add to Core Data for testing purposes
         
 //        let entity = NSEntityDescription.entityForName("HighScore", inManagedObjectContext: viewControllersManagedObjectContext!)
 //        let fakeHighScore = HighScore(entity: entity!, insertIntoManagedObjectContext: viewControllersManagedObjectContext!)
@@ -33,7 +46,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
 //        let check = viewControllersManagedObjectContext?.save(NSErrorPointer())
 //        println(check)
 //        println(fakeHighScore)
-        
 //        let request = NSFetchRequest(entityName: "HighScore")
 //        let fetchedObject = viewControllersManagedObjectContext?.executeFetchRequest(request, error: NSErrorPointer())
 //        println(fetchedObject)
@@ -135,13 +147,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         gravity.addItem(latestNoteView)
         startTime = CFAbsoluteTimeGetCurrent()
         
-        // your long procedure
-        
         if (noteScoreInt < 15){
-            var aDelay = NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector:Selector("randomChooser"), userInfo: nil, repeats: false)
+            var aDelay = NSTimer.scheduledTimerWithTimeInterval(currentGameManager!.getNoteCreationTimeInterval(), target: self, selector:Selector("randomChooser"), userInfo: nil, repeats: false)
             }
         if (noteScoreInt == 15){
-            var aDelay = NSTimer.scheduledTimerWithTimeInterval(4, target: self, selector:Selector("newLevel"), userInfo: nil, repeats: false)
+            var aDelay = NSTimer.scheduledTimerWithTimeInterval(currentGameManager!.getNoteCreationTimeInterval(), target: self, selector:Selector("newLevel"), userInfo: nil, repeats: false)
             }
 
         }
@@ -149,39 +159,37 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     
     func saveScore(){
+        //Get Core Data Context
         let context = UIApplication.sharedApplication().delegate as! AppDelegate!
         let highScoreManagedObjectContext = context.managedObjectContext
-        
+        //Create entity
         let entity = NSEntityDescription.entityForName("HighScore", inManagedObjectContext: highScoreManagedObjectContext!)
         let newHighScore = HighScore(entity: entity!, insertIntoManagedObjectContext: highScoreManagedObjectContext!)
+        
+        //Set Values for the new object
         newHighScore.level = currentGameManager!.instrumentType!.level
         newHighScore.instrument = currentGameManager!.instrumentType!.instrumentType.rawValue
         newHighScore.score = pointsInt
         newHighScore.dateOfScore = NSDate()
         
+        //Save the context and print true if the save worked
         let check = highScoreManagedObjectContext!.save(NSErrorPointer())
         println(check)
     
     
     }
     
-    func removeViewWithTap(viewToRemove: UIView){
-        if currentTapGesture?.state == UIGestureRecognizerState.Ended{
-            viewToRemove.removeFromSuperview()
-            }
-        println("The recognizer is running the method removeViewWithTap")
-        }
     
     func handleTap(recognizer: UIGestureRecognizer){
         println("Nice Tap bro")
         levelCompleteScoreView?.removeFromSuperview()
         
-    
     }
     
     func newLevel(){
 
         saveScore()
+        //Create new view for displaying score to the user
         
         levelCompleteScoreView = UIView(frame: mainView.frame)
         var xFloat: CGFloat = CGRectGetMaxX(gameView.frame)/2
@@ -189,12 +197,14 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         levelCompleteScoreView?.center = CGPoint(x: xFloat, y: yFloat)
         levelCompleteScoreView?.backgroundColor = UIColor(white: 200, alpha: 0.8)
         
+        //Add tap gesture to remove the new frame
         currentTapGesture = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
         currentTapGesture?.delegate = self
         levelCompleteScoreView?.addGestureRecognizer(currentTapGesture!)
         
         gameView.addSubview(levelCompleteScoreView!)
         
+        //Add the appropriate text with a UILabel
         betweenLevelTextLabel = UILabel(frame: CGRectMake(0, 0, 200, 21))
         xFloat = CGRectGetMaxX(gameView.frame)/2
         yFloat = CGRectGetMaxY(gameView.frame)/2
@@ -203,7 +213,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         betweenLevelTextLabel?.text = "You got \(pointsInt) points!"
         levelCompleteScoreView?.addSubview(betweenLevelTextLabel!)
         
-        
+        //Reset the original level choosing view
         levelChooserLabel.hidden = false
         levelChooserStepper.hidden = false
         instrumentChooserStepper.hidden = false
@@ -219,6 +229,8 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         pointsInt = 0
         numberOfPoints.text = String(pointsInt)
         startButton.hidden = true
+        gravity.angle = 3.142
+        gravity.magnitude = currentGameManager!.getGravityMagnitude()
         mainView.alpha = 1
 
     }
@@ -227,23 +239,8 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         endTime = CFAbsoluteTimeGetCurrent()
         let elapsedTime = endTime! - startTime!
 
-        var pointsScored = Int()
-        
-        if elapsedTime < 2.1{
-            pointsScored = 100
-        }
-        if elapsedTime>2.1 && elapsedTime<2.7 {
-            pointsScored = 80
-        }
-        if elapsedTime>2.7 && elapsedTime<3.3 {
-            pointsScored = 60
-        }
-        if elapsedTime>3.3 && elapsedTime<3.7 {
-            pointsScored = 40
-        }
-        if elapsedTime>3.7 {
-            pointsScored = 20
-        }
+        var pointsScored = currentGameManager!.getScoreForNote(elapsedTime)
+
         let pointLabel = UILabel(frame: latestNoteView.frame)
         pointLabel.textAlignment = NSTextAlignment.Center
         pointLabel.font = UIFont.systemFontOfSize(24)
@@ -253,9 +250,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         gameView.addSubview(pointLabel)
         
         UIView.animateWithDuration(1.2, delay: 0, options: nil, animations: {pointLabel.alpha = 1; pointLabel.frame = pointLabelEndPosition}, completion: {complete in pointLabel.removeFromSuperview(); self.pointsInt += pointsScored; self.numberOfPoints.text = String(self.pointsInt)})
-        //UIView.animateWithDuration(1.5, animations: {pointLabel.alpha = 0; pointLabel.frame = pointLabelEndPosition})
-        //pointsInt += pointsScored
-        //numberOfPoints.text = String(pointsInt)
+
 
     }
     
@@ -267,11 +262,22 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     
-    func subtractPoints(){
-        pointsInt += -50
+    func subtractPointsWithAnimation(){
+        if (latestNoteView?.window != nil){
+        let pointLabel = UILabel(frame: latestNoteView.frame)
+        pointLabel.textAlignment = NSTextAlignment.Center
+        pointLabel.font = UIFont.systemFontOfSize(20)
+        pointLabel.text = "-40"
+        pointLabel.alpha = 1
+        let pointLabelEndPosition = CGRectMake(pointLabel.frame.minX, pointLabel.frame.minY+60, pointLabel.frame.width, pointLabel.frame.height)
+        gameView.addSubview(pointLabel)
+        UIView.animateWithDuration(0.5, animations: {pointLabel.alpha = 0; pointLabel.frame = pointLabelEndPosition}, completion: {complete in pointLabel.removeFromSuperview()})
+            }
+        pointsInt += -40
         numberOfPoints.text = String(pointsInt)
     }
     func checkForCorrectNote (intRepresentingNote: Int){
+        //Checks for accuracy based on the note integer. First check to see if there is a note in the view, then check for the proper int.
         if (latestNoteView?.window != nil){
             if latestNoteView?.noteName == intRepresentingNote{
                 //Check if the button hasn't been pushed already
@@ -282,28 +288,27 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
             }
             else
             {
-                subtractPoints()
+                subtractPointsWithAnimation()
             }
         }
         else
         {
-            subtractPoints()
+            subtractPointsWithAnimation()
         }
     
     }
     
     @IBAction func newNote() {
-        startMoving()
         chooseInstrument()
+        startMoving()
         randomChooser()
+        println(currentGameManager?.getGravityMagnitude())
     }
     
     func chooseInstrument() {
         
         self.currentGameManager = GameManager(levelNumber: Int(levelChooserStepper.value), instrument: (instrumentChooserLabel.text)!)
         //startButton.hidden = false
-        //trumpetButton.removeFromSuperview()
-        //altoButton.removeFromSuperview()
         levelChooserStepper.hidden = true
         levelChooserLabel.hidden = true
         instrumentChooserLabel.hidden = true
@@ -337,29 +342,14 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func unwindToMainVC(segue: UIStoryboardSegue) {
-        
+        //This method is called when the High Score board is unwound to the main view controller
     }
     
-    lazy var animator: UIDynamicAnimator = {let lazilyCreatedUIDynamicAnimator = UIDynamicAnimator(referenceView: self.mainView)
-        return lazilyCreatedUIDynamicAnimator
-        }()
-    var pointsInt: Int = 0
-    var noteScoreInt: Int = 0
-    var currentGameManager: GameManager? = nil
-    var betweenLevelTextLabel : UILabel?
-    var currentTapGesture = UIGestureRecognizer?()
-    let gravity = UIGravityBehavior()
-    weak var latestNoteView: NoteView!
-    
-    var levelCompleteScoreView : UIView?
 
-    var startTime : CFAbsoluteTime?
-    var endTime: CFAbsoluteTime?
     
     
     @IBOutlet weak var noteScore: UILabel!
-    @IBOutlet weak var trumpetButton: UIButton!
-    @IBOutlet weak var altoButton: UIButton!
+
     @IBOutlet weak var numberOfPoints: UILabel!
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var gameView: UIView!

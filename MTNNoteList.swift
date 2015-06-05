@@ -18,17 +18,13 @@ class NoteList{
 
         noteList["C2b"] = NoteView (note: 1, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C2b", ofType: "png")!))
         noteList["C#2b"] = NoteView (note: 2, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C#2b", ofType: "png")!))
-
         noteList["Db2b"] = NoteView (note: 2, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Db2b", ofType: "png")!))
         noteList["D2b"] = NoteView (note: 3, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("D2b", ofType: "png")!))
         noteList["Eb2b"] = NoteView (note: 4, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Eb2b", ofType: "png")!))
         noteList["E2b"] = NoteView (note: 5, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("E2b", ofType: "png")!))
-
         noteList["F2b"] = NoteView (note: 6, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("F2b", ofType: "png")!))
         noteList["F#2b"] = NoteView (note: 7, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("F#2b", ofType: "png")!))
-
         noteList["Gb2b"] = NoteView (note: 7, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Gb2b", ofType: "png")!))
-
         noteList["G2b"] = NoteView (note: 8, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("G2b", ofType: "png")!))
         noteList["Ab2b"] = NoteView (note: 9, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Ab2b", ofType: "png")!))
         noteList["A2b"] = NoteView (note: 10, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("A2b", ofType: "png")!))
@@ -36,9 +32,7 @@ class NoteList{
 
         noteList["C3b"] = NoteView (note: 1, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C3b", ofType: "png")!))
         noteList["C#3b"] = NoteView (note: 2, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C#3b", ofType: "png")!))
-
         noteList["Db3b"] = NoteView (note: 2, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Db3b", ofType: "png")!))
-
         noteList["D3b"] = NoteView (note: 3, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("D3b", ofType: "png")!))
         noteList["Eb3b"] = NoteView (note: 4, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Eb3b", ofType: "png")!))
         noteList["E3t"] = NoteView (note: 5, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("E3t", ofType: "png")!))
@@ -47,9 +41,7 @@ class NoteList{
         noteList["F#3b"] = NoteView (note: 7, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("F#3b", ofType: "png")!))
         noteList["F#3t"] = NoteView (note: 7, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("F#3t", ofType: "png")!))
         noteList["Gb3b"] = NoteView (note: 7, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Gb3b", ofType: "png")!))
-
         noteList["G3b"] = NoteView (note: 8, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("G3b", ofType: "png")!))
-        
         noteList["G3t"] = NoteView (note: 8, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("G3t", ofType: "png")!))
         noteList["Ab3b"] = NoteView (note: 9, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Ab3b", ofType: "png")!))
         noteList["A3b"] = NoteView (note: 10, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("A3b", ofType: "png")!))
@@ -60,7 +52,6 @@ class NoteList{
         noteList["B3t"] = NoteView (note: 12, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("B3t", ofType: "png")!))
         
         noteList["C4b"] = NoteView (note: 1, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C4b", ofType: "png")!))
-
         noteList["C4t"] = NoteView (note: 1, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C4t", ofType: "png")!))
         noteList["C#4t"] = NoteView (note: 2, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C#4t", ofType: "png")!))
         noteList["D4t"] = NoteView (note: 3, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("D4t", ofType: "png")!))
