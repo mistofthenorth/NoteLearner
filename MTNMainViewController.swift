@@ -24,8 +24,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var levelCompleteScoreView : UIView?
     
-    var startTime : CFAbsoluteTime?
-    var endTime: CFAbsoluteTime?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,23 +31,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         startButton.hidden = true
         
         setButtonLayout()
-        
-        //Code for building a fake score to add to Core Data for testing purposes
-        
-//        let entity = NSEntityDescription.entityForName("HighScore", inManagedObjectContext: viewControllersManagedObjectContext!)
-//        let fakeHighScore = HighScore(entity: entity!, insertIntoManagedObjectContext: viewControllersManagedObjectContext!)
-//        fakeHighScore.level = 1
-//        fakeHighScore.instrument = "Trumpet"
-//        fakeHighScore.score = 490
-//        fakeHighScore.dateOfScore = NSDate()
-//        
-//        let check = viewControllersManagedObjectContext?.save(NSErrorPointer())
-//        println(check)
-//        println(fakeHighScore)
-//        let request = NSFetchRequest(entityName: "HighScore")
-//        let fetchedObject = viewControllersManagedObjectContext?.executeFetchRequest(request, error: NSErrorPointer())
-//        println(fetchedObject)
-        
         
     
     }
@@ -145,7 +126,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         latestNoteView.frame = CGRectMake(CGRectGetMaxX(gameView.frame)-1, CGFloat(yPosition), 257, 120)
         gameView.addSubview(latestNoteView)
         gravity.addItem(latestNoteView)
-        startTime = CFAbsoluteTimeGetCurrent()
         
         if (noteScoreInt < 15){
             var aDelay = NSTimer.scheduledTimerWithTimeInterval(currentGameManager!.getNoteCreationTimeInterval(), target: self, selector:Selector("randomChooser"), userInfo: nil, repeats: false)
@@ -236,10 +216,8 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     //The next three functions check for the correct note according to an int representing each note
     func addPointsWithAnimation(){
-        endTime = CFAbsoluteTimeGetCurrent()
-        let elapsedTime = endTime! - startTime!
 
-        var pointsScored = currentGameManager!.getScoreForNote(elapsedTime)
+        var pointsScored = currentGameManager!.getScoreForNote(gameView!.frame.maxX, currentX: latestNoteView!.frame.maxX)
 
         let pointLabel = UILabel(frame: latestNoteView.frame)
         pointLabel.textAlignment = NSTextAlignment.Center
@@ -282,8 +260,11 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
             if latestNoteView?.noteName == intRepresentingNote{
                 //Check if the button hasn't been pushed already
                 if(latestNoteView?.alpha == 1){
+                    println(latestNoteView?.frame.maxX)
+                    println(gameView?.frame.maxX)
                 addPointsWithAnimation()
                 animateNoteDisappear()
+
                 }
             }
             else
@@ -344,8 +325,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func unwindToMainVC(segue: UIStoryboardSegue) {
         //This method is called when the High Score board is unwound to the main view controller
     }
-    
-
     
     
     @IBOutlet weak var noteScore: UILabel!

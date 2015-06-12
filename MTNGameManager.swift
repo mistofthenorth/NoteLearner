@@ -38,7 +38,7 @@ class GameManager{
             return CGFloat(gravityDouble)
         }
         else {
-            let gravityDouble = Double(whichLevel!)*0.011 + 0.05
+            let gravityDouble = Double(whichLevel!)*0.011 + 0.08
             return CGFloat(gravityDouble)
         }
         
@@ -54,35 +54,45 @@ class GameManager{
         }
     }
     
-    func getScoreForNote(elapsedTime: CFTimeInterval) -> Int{
-        //Calculates a score out of 100 based on the amount of time it takes to select the note
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-
-                switch whichLevel!{
-                case 1...3: if (elapsedTime < 2){return 100}
-                    else {return Int((elapsedTime-7)*(-20))}
-                    
-                case 4...6: if (elapsedTime < 1.8){return 100}
-                    else {return Int((elapsedTime-6)*(-23.8))}
-                    
-                case 7...9: if (elapsedTime < 1.6){return 100}
-                    else {return Int((elapsedTime-5)*(-29.4))}
-                default: return 0
-            }
+    func getScoreForNote(maximumX: CGFloat, currentX: CGFloat) -> Int{
+        if(currentX/maximumX > 0.92){
+            return 100
         }
         else{
-                switch whichLevel!{
-                case 1...3: if (elapsedTime < 2.6){return 100}
-                else {return Int((elapsedTime-6)*(-29.4))}
-                    
-                case 4...6: if (elapsedTime < 2.3){return 100}
-                else {return Int((elapsedTime-5)*(-37))}
-                    
-                case 7...9: if (elapsedTime < 1.8){return 100}
-                else {return Int((elapsedTime-4)*(-45))}
-                default: return 0
-                }
-            }
+            let score = (((currentX/maximumX)*100)/0.92)
+            return Int(score)
         }
+        //Calculates a score out of 100 based on the amount of time it takes to select the note
+//        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+//
+//                switch whichLevel!{
+//                case 1...3: if (elapsedTime < 2){return 100}
+//                    else {return Int((elapsedTime-7)*(-20))}
+//                    
+//                case 4...6: if (elapsedTime < 1.8){return 100}
+//                    else {return Int((elapsedTime-6)*(-23.8))}
+//                    
+//                case 7...9: if (elapsedTime < 1.6){return 100}
+//                    else {return Int((elapsedTime-5)*(-29.4))}
+//                default: return 0
+//            }
+//        }
+//        else{
+//                switch whichLevel!{
+//                case 1...3: if (elapsedTime < 2.6){return 100}
+//                else {return Int((elapsedTime-6)*(-29.4))}
+//                    
+//                case 4...6: if (elapsedTime < 2.3){return 100}
+//                else {return Int((elapsedTime-5)*(-37))}
+//                    
+//                case 7...9: if (elapsedTime < 1.8){return 100}
+//                else {return Int((elapsedTime-4)*(-45))}
+//                default: return 0
+//                }
+//            }
+        
+        
+
+       }
     }
     

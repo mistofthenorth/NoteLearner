@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let initialViewController : ViewController = ipadStoryboard.instantiateInitialViewController() as! ViewController
             window?.rootViewController = initialViewController
             
+            
         }
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
             println("You got a iPhone")
