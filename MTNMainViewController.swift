@@ -21,7 +21,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     var currentTapGesture = UIGestureRecognizer?()
     let gravity = UIGravityBehavior()
     weak var latestNoteView: NoteView!
-    
     var levelCompleteScoreView : UIView?
     
     
@@ -29,9 +28,16 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         super.viewDidLoad()
         //gravity.magnitude = 0.2
         startButton.hidden = true
-        
+        UIGraphicsBeginImageContext(mainView.frame.size)
+        var backgroundImage = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("imageSampleSheetMusic", ofType: "jpg")!)!
+        backgroundImage.drawInRect(mainView.bounds)
+        var editedBackgroundImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        mainView.backgroundColor = UIColor(patternImage: editedBackgroundImage)
+        gameView.backgroundColor = UIColor(white: 250, alpha: 0.7)
+        //gameView.alpha = 1
         setButtonLayout()
-        
+        setButtonStyles()
     
     }
 
@@ -69,7 +75,25 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         startButton.hidden = false
     }
+    func setButtonStyles(){
+        var radius = CGFloat(20)
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+         radius = CGFloat(30)
+        }
+        buttonA.layer.cornerRadius = radius
+        buttonB.layer.cornerRadius = radius
+        buttonC.layer.cornerRadius = radius
+        buttonD.layer.cornerRadius = radius
+        buttonE.layer.cornerRadius = radius
+        buttonF.layer.cornerRadius = radius
+        buttonG.layer.cornerRadius = radius
+        buttonAsharp.layer.cornerRadius = radius
+        buttonCsharp.layer.cornerRadius = radius
+        buttonDsharp.layer.cornerRadius = radius
+        buttonFsharp.layer.cornerRadius = radius
+        buttonGsharp.layer.cornerRadius = radius
     
+    }
     
     func setButtonLayout(){
         buttonA.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -154,7 +178,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         
         //Save the context and print true if the save worked
         let check = highScoreManagedObjectContext!.save(NSErrorPointer())
-        println(check)
+        println("High Score Saved = \(check)")
     
     
     }
@@ -163,6 +187,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     func handleTap(recognizer: UIGestureRecognizer){
         println("Nice Tap bro")
         levelCompleteScoreView?.removeFromSuperview()
+        mainView.alpha = 1
         
     }
     
@@ -171,11 +196,12 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         saveScore()
         //Create new view for displaying score to the user
         
-        levelCompleteScoreView = UIView(frame: mainView.frame)
+        levelCompleteScoreView = UIView(frame: CGRectMake(0, 0, 400, 200))
         var xFloat: CGFloat = CGRectGetMaxX(gameView.frame)/2
         var yFloat: CGFloat = CGRectGetMaxY(gameView.frame)/2
         levelCompleteScoreView?.center = CGPoint(x: xFloat, y: yFloat)
-        levelCompleteScoreView?.backgroundColor = UIColor(white: 200, alpha: 0.8)
+        levelCompleteScoreView?.backgroundColor = UIColor(white: 200, alpha: 1)
+        mainView.alpha = 0.8
         
         //Add tap gesture to remove the new frame
         currentTapGesture = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
@@ -185,12 +211,13 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         gameView.addSubview(levelCompleteScoreView!)
         
         //Add the appropriate text with a UILabel
-        betweenLevelTextLabel = UILabel(frame: CGRectMake(0, 0, 200, 21))
-        xFloat = CGRectGetMaxX(gameView.frame)/2
-        yFloat = CGRectGetMaxY(gameView.frame)/2
+        betweenLevelTextLabel = UILabel(frame: CGRectMake(0, 0, 200, 200))
+        betweenLevelTextLabel?.numberOfLines = 4
+        xFloat = CGRectGetMaxX(levelCompleteScoreView!.bounds)/2
+        yFloat = CGRectGetMaxY(levelCompleteScoreView!.bounds)/2
         betweenLevelTextLabel?.center = CGPointMake(xFloat,yFloat)
         betweenLevelTextLabel?.textAlignment = NSTextAlignment.Center
-        betweenLevelTextLabel?.text = "You got \(pointsInt) points!"
+        betweenLevelTextLabel?.text = "You got \(pointsInt) points! \n \(currentGameManager!.instrumentType!.instrumentType.rawValue) Level - \(currentGameManager!.whichLevel!)"
         levelCompleteScoreView?.addSubview(betweenLevelTextLabel!)
         
         //Reset the original level choosing view
@@ -328,12 +355,10 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     
     
     @IBOutlet weak var noteScore: UILabel!
-
     @IBOutlet weak var numberOfPoints: UILabel!
     @IBOutlet weak var mainView: UIView!
     @IBOutlet weak var gameView: UIView!
     @IBOutlet weak var currentLevelLabel: UILabel!
-    
     @IBOutlet weak var levelChooserLabel: UILabel!
     @IBOutlet weak var levelChooserStepper: UIStepper!
     @IBOutlet weak var instrumentChooserStepper: UIStepper!

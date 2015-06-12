@@ -59,7 +59,8 @@ class GameManager{
             return 100
         }
         else{
-            let score = (((currentX/maximumX)*100)/0.92)
+            var score = (((currentX/maximumX)*100)/0.92)
+            if score<0{score = 1}
             return Int(score)
         }
         //Calculates a score out of 100 based on the amount of time it takes to select the note
