@@ -369,54 +369,6 @@
             </objects>
             <point key="canvasLocation" x="589" y="346"/>
         </scene>
-        <!--High Score View Controller-->
-        <scene sceneID="Vll-UX-JAE">
-            <objects>
-                <viewController id="uJz-eq-MlO" customClass="HighScoreViewController" customModule="NoteLearner" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="V7E-yB-ec1"/>
-                        <viewControllerLayoutGuide type="bottom" id="1rB-Kz-QWD"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="RXq-qF-6I6">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ywg-QU-PaA">
-                                <rect key="frame" x="279" y="28" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wc6-sb-nXC">
-                                <rect key="frame" x="283" y="550" width="35" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="k5c-cL-BeB"/>
-                                </constraints>
-                                <state key="normal" title="Back">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="D6L-TQ-cNt" kind="unwind" unwindAction="unwindToMainVC:" id="DzR-qW-gD4"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="centerX" secondItem="wc6-sb-nXC" secondAttribute="centerX" id="K0V-Me-tKv"/>
-                            <constraint firstItem="Ywg-QU-PaA" firstAttribute="top" secondItem="V7E-yB-ec1" secondAttribute="bottom" constant="8" id="P3d-OA-Swz"/>
-                            <constraint firstItem="1rB-Kz-QWD" firstAttribute="top" secondItem="wc6-sb-nXC" secondAttribute="bottom" constant="20" id="YdV-T4-XuJ"/>
-                            <constraint firstAttribute="centerX" secondItem="Ywg-QU-PaA" secondAttribute="centerX" id="nMd-da-Fgo"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="highScoreLabel" destination="Ywg-QU-PaA" id="Mk1-eQ-ZY4"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Eff-Sc-kby" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="D6L-TQ-cNt" userLabel="Exit" sceneMemberID="exit"/>
-            </objects>
-            <point key="canvasLocation" x="1301" y="346"/>
-        </scene>
         <!--High Score Table View-->
         <scene sceneID="vTI-fH-KS6">
             <objects>

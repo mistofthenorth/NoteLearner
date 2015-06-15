@@ -28,14 +28,19 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         super.viewDidLoad()
         //gravity.magnitude = 0.2
         startButton.hidden = true
-        UIGraphicsBeginImageContext(mainView.frame.size)
-        var backgroundImage = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("imageSampleSheetMusic", ofType: "jpg")!)!
-        backgroundImage.drawInRect(mainView.bounds)
-        var editedBackgroundImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        mainView.backgroundColor = UIColor(patternImage: editedBackgroundImage)
-        gameView.backgroundColor = UIColor(white: 250, alpha: 0.7)
+        //UIGraphicsBeginImageContext(gameView.bounds.size)
+        var backgroundImage = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("616x540threeBlankStaves", ofType: "png")!)!
+
+        //backgroundImage.drawInRect(gameView.bounds)
+        //var editedBackgroundImage = UIGraphicsGetImageFromCurrentImageContext()
+        //UIGraphicsEndImageContext()
+        gameView.backgroundColor = UIColor(patternImage: backgroundImage)
+        println(gameView.center)
+        //gameView.backgroundColor = UIColor(white: 250, alpha: 0.7)
         //gameView.alpha = 1
+        println(gameView.frame)
+        println(backgroundImage.size)
+        println(view.contentScaleFactor)
         setButtonLayout()
         setButtonStyles()
     
@@ -145,9 +150,21 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         var getNewNote = currentGameManager?.note()
 
         latestNoteView = getNewNote
-        let yPosition = arc4random_uniform(UInt32(CGRectGetMaxY(gameView.bounds)-120))
+        //let yPosition = arc4random_uniform(UInt32(CGRectGetMaxY(gameView.bounds)-120))
+        let staveNumber = arc4random_uniform(3)
+        var yPosition = UInt32()
+        if staveNumber == 0{
+            yPosition = UInt32(CGRectGetMaxY(gameView.bounds)-227)
+        }
+        if staveNumber == 1{
+            yPosition = UInt32(CGRectGetMaxY(gameView.bounds)-362)
+        }
+        if staveNumber == 2{
+            yPosition = UInt32(CGRectGetMaxY(gameView.bounds)-496)
+        }
         println(yPosition)
-        latestNoteView.frame = CGRectMake(CGRectGetMaxX(gameView.frame)-1, CGFloat(yPosition), 257, 120)
+        latestNoteView.frame = CGRectMake(CGRectGetMaxX(gameView.frame)-1, CGFloat(yPosition), 180, 182)
+        
         gameView.addSubview(latestNoteView)
         gravity.addItem(latestNoteView)
         
@@ -236,7 +253,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         pointsInt = 0
         numberOfPoints.text = String(pointsInt)
         startButton.hidden = true
-        gravity.angle = 3.142
+        gravity.angle = 3.1415
         gravity.magnitude = currentGameManager!.getGravityMagnitude()
         mainView.alpha = 1
 
