@@ -22,6 +22,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     let gravity = UIGravityBehavior()
     weak var latestNoteView: NoteView!
     var levelCompleteScoreView : UIView?
+    var iphoneGameViewScale : CGFloat = 1
     
     
     override func viewDidLoad() {
@@ -35,19 +36,38 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         //var editedBackgroundImage = UIGraphicsGetImageFromCurrentImageContext()
         //UIGraphicsEndImageContext()
         gameView.backgroundColor = UIColor(patternImage: backgroundImage)
-        println(gameView.center)
+        //println(gameView.center)
         //gameView.backgroundColor = UIColor(white: 250, alpha: 0.7)
         //gameView.alpha = 1
-        println(gameView.frame)
-        println(backgroundImage.size)
-        println(view.contentScaleFactor)
+        //println(gameView.frame)
+        //println(backgroundImage.size)
+        //println(view.contentScaleFactor)
+        //println(gameView.bounds.maxX)
         setButtonLayout()
         setButtonStyles()
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+            let backgroundImage = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("blankStaff", ofType: "png")!)
+            iPhoneStaff.image = backgroundImage
     
     }
 
+    func viewDidLayoutSubviews() {
+        println(gameView.bounds.maxY)
+        println(iphoneGameViewScale)
+
+
+            //view.addSubview(backgroundImage)
+            //gameView.backgroundColor = UIColor(patternImage: backgroundImage.image!)
+            
+            
+        }
+    }
+    
     override func viewDidAppear(animated: Bool) {
         animator.addBehavior(gravity)
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+        iphoneGameViewScale = CGFloat(gameView.bounds.maxY/188)
+        }
 
     }
     @IBAction func userChangedLevel(sender: UIStepper) {
@@ -57,7 +77,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     }
 
     @IBAction func userChangedInstrument(sender: UIStepper) {
-        println("The User has Changed the Instrument to ")
+        //println("The User has Changed the Instrument to ")
         switch sender.value {
         case 1: instrumentChooserLabel?.text = "Baritone Treble"
         case 2: instrumentChooserLabel?.text = "Trumpet"
@@ -162,8 +182,14 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
         if staveNumber == 2{
             yPosition = UInt32(CGRectGetMaxY(gameView.bounds)-496)
         }
+        
+        //reset the height for the iPhone
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+                yPosition = UInt32(CGRectGetMinY(gameView.bounds))
+        }
+        
         println(yPosition)
-        latestNoteView.frame = CGRectMake(CGRectGetMaxX(gameView.frame)-1, CGFloat(yPosition), 180, 182)
+        latestNoteView.frame = CGRectMake(CGRectGetMaxX(gameView.frame)-1, CGFloat(yPosition), (180*iphoneGameViewScale), (182*iphoneGameViewScale))
         
         gameView.addSubview(latestNoteView)
         gravity.addItem(latestNoteView)
@@ -380,6 +406,7 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var levelChooserStepper: UIStepper!
     @IBOutlet weak var instrumentChooserStepper: UIStepper!
     @IBOutlet weak var instrumentChooserLabel: UILabel!
+    @IBOutlet weak var iPhoneStaff: UIImageView!
     
     @IBOutlet weak var buttonC: UIButton!
     @IBOutlet weak var buttonD: UIButton!

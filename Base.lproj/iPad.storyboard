@@ -103,18 +103,6 @@
                                     <action selector="touchNoteName:" destination="BYZ-38-t0r" eventType="touchUpInside" id="gfp-mE-xnH"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" alpha="0.94999999999999996" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b5l-TF-gjI">
-                                <rect key="frame" x="388" y="469" width="115" height="74"/>
-                                <color key="backgroundColor" red="0.66666666666666663" green="0.045388448828293626" blue="0.004393052885538558" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
-                                <state key="normal" title="G#/Ab">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="touchNoteName:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XfG-mI-OMI"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" alpha="0.94999999999999996" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1ID-Ds-Caw">
                                 <rect key="frame" x="504" y="490" width="87" height="30"/>
                                 <color key="backgroundColor" red="0.66666666666666663" green="0.045388448828293626" blue="0.004393052885538558" alpha="1" colorSpace="calibratedRGB"/>
@@ -306,6 +294,18 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <button opaque="NO" alpha="0.94999999999999996" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" reversesTitleShadowWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b5l-TF-gjI">
+                                <rect key="frame" x="388" y="469" width="115" height="74"/>
+                                <color key="backgroundColor" red="0.66666666666666663" green="0.045388448828293626" blue="0.004393052885538558" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                <state key="normal" title="G#/Ab">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="touchNoteName:" destination="BYZ-38-t0r" eventType="touchUpInside" id="XfG-mI-OMI"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <gestureRecognizers/>

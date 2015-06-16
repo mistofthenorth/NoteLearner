@@ -595,8 +595,8 @@ class Instrument {
                 default: break
                 
             }
-        case .Trombone :
-            println("It's a Trombone!")
+        case .ElectricBass :
+            println("It's an Electric Bass!")
             switch level{
             case 1 :
                 noteArray.append(noteList["F3b"]!)
@@ -618,6 +618,7 @@ class Instrument {
             case 4 :
                 level = level-1
                 noteArray = getNotes()
+                noteArray.append(noteList["E2b"]!)
                 level = 4
             case 5 :
                 level = level-1
