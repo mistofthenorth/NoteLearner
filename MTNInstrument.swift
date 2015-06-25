@@ -5,6 +5,8 @@
 //  Created by Brian M Owen on 4/9/15.
 //  Copyright (c) 2015 Brian Owen. All rights reserved.
 //
+//  This class has only one function, getNotes() -> [NoteView]
+//  getNotes works by checking for the instrument type first, then the level. It adds notes to the array by recursively adding all the previous level's notes. This class is called by the GameManager Class during its initialization
 
 import UIKit
 
@@ -15,28 +17,27 @@ class Instrument {
     
     init(instrument: String, setLevel: Int){
         switch instrument{
-        case "Trumpet" : instrumentType = .Trumpet
-        case "Baritone Treble" : instrumentType = .BaritoneTreble
-        case "Alto Saxophone" : instrumentType = .AltoSaxophone
-        case "Tenor Saxophone" : instrumentType = .TenorSaxophone
-        case "Baritone Saxophone" : instrumentType = .BaritoneSaxophone
-        case "Flute" : instrumentType = .Flute
-        case "Oboe" : instrumentType = .Oboe
-        case "Clarinet" : instrumentType = .Clarinet
-        case "Bass Clarinet" : instrumentType = .BassClarinet
-        case "Alto Clarinet" : instrumentType = .AltoClarinet
-        case "Percussion" : instrumentType = .Percussion
-        case "French Horn" : instrumentType = .FrenchHorn
-        case "Trombone" : instrumentType = .Trombone
-        case "Baritone Bass" : instrumentType = .BaritoneBass
-        case "Bassoon" : instrumentType = .Bassoon
-        case "Electric Bass" : instrumentType = .ElectricBass
-        case "Tuba" : instrumentType = .Tuba
-        default : instrumentType = .Empty
+        case "Trumpet" : self.instrumentType = .Trumpet
+        case "Baritone Treble" : self.instrumentType = .BaritoneTreble
+        case "Alto Saxophone" : self.instrumentType = .AltoSaxophone
+        case "Tenor Saxophone" : self.instrumentType = .TenorSaxophone
+        case "Baritone Saxophone" : self.instrumentType = .BaritoneSaxophone
+        case "Flute" : self.instrumentType = .Flute
+        case "Oboe" : self.instrumentType = .Oboe
+        case "Clarinet" : self.instrumentType = .Clarinet
+        case "Bass Clarinet" : self.instrumentType = .BassClarinet
+        case "Alto Clarinet" : self.instrumentType = .AltoClarinet
+        case "Percussion" : self.instrumentType = .Percussion
+        case "French Horn" : self.instrumentType = .FrenchHorn
+        case "Trombone" : self.instrumentType = .Trombone
+        case "Baritone Bass" : self.instrumentType = .BaritoneBass
+        case "Bassoon" : self.instrumentType = .Bassoon
+        case "Electric Bass" : self.instrumentType = .ElectricBass
+        case "Tuba" : self.instrumentType = .Tuba
+        default : self.instrumentType = .Empty
         }
         
-        
-        level = setLevel
+        self.level = setLevel
         
     }
     
@@ -47,7 +48,7 @@ class Instrument {
         
         switch instrumentType {
         case .Trumpet :
-        println("It's a trumpet")
+        //println("It's a trumpet")
             switch level{
                 case 1 :
                     noteArray.append(noteList["E4t"]!)
@@ -106,7 +107,7 @@ class Instrument {
                     
                 }
         case .AltoSaxophone :
-        println("It's an alto sax")
+        //println("It's an alto sax")
             switch level{
                 case 1:
                     noteArray.append(noteList["B4t"]!)
@@ -165,7 +166,7 @@ class Instrument {
                 }
             
         case .Flute :
-                println("It's a Flute!")
+                //println("It's a Flute!")
                 switch level {
                 case 1:
                     noteArray.append(noteList["F5t"]!)
@@ -223,7 +224,7 @@ class Instrument {
                 default: break
             }
         case .Oboe :
-            println("You got an Oboe, bummer.")
+            //println("You got an Oboe, bummer.")
                 switch level{
                 case 1:
                     noteArray.append(noteList["F5t"]!)
@@ -286,7 +287,7 @@ class Instrument {
                 default: break
             }
         case .Clarinet :
-            println("You pulled Clarinet, better luck next time")
+            //println("You pulled Clarinet, better luck next time")
             switch level{
                 case 1 :
                     noteArray.append(noteList["E4t"]!)
@@ -359,7 +360,7 @@ class Instrument {
                 instrumentType = .BassClarinet
         
         case .AltoClarinet :
-            println("Hauling an Alto Clarinet this time")
+            //println("Hauling an Alto Clarinet this time")
             switch level{
                 case 1 :
                     noteArray.append(noteList["D4t"]!)
@@ -415,7 +416,7 @@ class Instrument {
                 default: break
             }
         case .TenorSaxophone :
-            println("It's Tenor Sax Time!")
+            //println("It's Tenor Sax Time!")
             switch level{
                 case 1 :
                     noteArray.append(noteList["E5t"]!)
@@ -479,7 +480,7 @@ class Instrument {
                 
             }
         case .BaritoneTreble :
-            println("It's a Baritone in Treble")
+            //println("It's a Baritone in Treble")
             switch level{
                 case 1 :
                     noteArray.append(noteList["E4t"]!)
@@ -538,7 +539,7 @@ class Instrument {
                 
             }
         case .Trombone :
-            println("It's a Trombone!")
+            //println("It's a Trombone!")
             switch level{
                 case 1 :
                     noteArray.append(noteList["F3b"]!)
@@ -596,128 +597,128 @@ class Instrument {
                 
             }
         case .ElectricBass :
-            println("It's an Electric Bass!")
+            //println("It's an Electric Bass!")
             switch level{
-            case 1 :
-                noteArray.append(noteList["F3b"]!)
-                noteArray.append(noteList["Eb3b"]!)
-                noteArray.append(noteList["D3b"]!)
-                
-            case 2 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["C3b"]!)
-                noteArray.append(noteList["Bb2b"]!)
-                level = 2
-            case 3 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["G3b"]!)
-                noteArray.append(noteList["A2b"]!)
-                level = 3
-            case 4 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["E2b"]!)
-                level = 4
-            case 5 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["Ab2b"]!)
-                noteArray.append(noteList["Ab3b"]!)
-                noteArray.append(noteList["Bb3b"]!)
-                level = 5
-            case 6 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["A3b"]!)
-                level = 6
-            case 7 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["Db3b"]!)
-                level = 7
-            case 8 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["C4b"]!)
-                level = 8
-            case 9 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["Gb3b"]!)
-                noteArray.append(noteList["F#3b"]!)
-                noteArray.append(noteList["C#3b"]!)
-                
-                level = 9
+                case 1 :
+                    noteArray.append(noteList["F3b"]!)
+                    noteArray.append(noteList["Eb3b"]!)
+                    noteArray.append(noteList["D3b"]!)
+                    
+                case 2 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["C3b"]!)
+                    noteArray.append(noteList["Bb2b"]!)
+                    level = 2
+                case 3 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["G3b"]!)
+                    noteArray.append(noteList["A2b"]!)
+                    level = 3
+                case 4 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["E2b"]!)
+                    level = 4
+                case 5 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["Ab2b"]!)
+                    noteArray.append(noteList["Ab3b"]!)
+                    noteArray.append(noteList["Bb3b"]!)
+                    level = 5
+                case 6 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["A3b"]!)
+                    level = 6
+                case 7 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["Db3b"]!)
+                    level = 7
+                case 8 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["C4b"]!)
+                    level = 8
+                case 9 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["Gb3b"]!)
+                    noteArray.append(noteList["F#3b"]!)
+                    noteArray.append(noteList["C#3b"]!)
+                    
+                    level = 9
                 
             default: break
                 
             }
         case .Tuba :
-            println("It's a Tuba!")
+            //println("It's a Tuba!")
             switch level{
-            case 1 :
-                noteArray.append(noteList["F2b"]!)
-                noteArray.append(noteList["Eb2b"]!)
-                noteArray.append(noteList["D2b"]!)
-                
-            case 2 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["C2b"]!)
-                noteArray.append(noteList["Bb1b"]!)
-                level = 2
-            case 3 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["G2b"]!)
-                noteArray.append(noteList["A1b"]!)
-                level = 3
-            case 4 :
-                level = level-1
-                noteArray = getNotes()
-                level = 4
-            case 5 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["Ab1b"]!)
-                noteArray.append(noteList["Ab2b"]!)
-                noteArray.append(noteList["Bb2b"]!)
-                level = 5
-            case 6 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["E2b"]!)
-                noteArray.append(noteList["A2b"]!)
-                
-                level = 6
-            case 7 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["Db2b"]!)
-                level = 7
-            case 8 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["C3b"]!)
-                level = 8
-            case 9 :
-                level = level-1
-                noteArray = getNotes()
-                noteArray.append(noteList["Gb2b"]!)
-                noteArray.append(noteList["F#2b"]!)
-                noteArray.append(noteList["C#2b"]!)
-                level = 9
-                
-                
-                
-            default: break
-                
+                case 1 :
+                    noteArray.append(noteList["F2b"]!)
+                    noteArray.append(noteList["Eb2b"]!)
+                    noteArray.append(noteList["D2b"]!)
+                    
+                case 2 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["C2b"]!)
+                    noteArray.append(noteList["Bb1b"]!)
+                    level = 2
+                case 3 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["G2b"]!)
+                    noteArray.append(noteList["A1b"]!)
+                    level = 3
+                case 4 :
+                    level = level-1
+                    noteArray = getNotes()
+                    level = 4
+                case 5 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["Ab1b"]!)
+                    noteArray.append(noteList["Ab2b"]!)
+                    noteArray.append(noteList["Bb2b"]!)
+                    level = 5
+                case 6 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["E2b"]!)
+                    noteArray.append(noteList["A2b"]!)
+                    
+                    level = 6
+                case 7 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["Db2b"]!)
+                    level = 7
+                case 8 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["C3b"]!)
+                    level = 8
+                case 9 :
+                    level = level-1
+                    noteArray = getNotes()
+                    noteArray.append(noteList["Gb2b"]!)
+                    noteArray.append(noteList["F#2b"]!)
+                    noteArray.append(noteList["C#2b"]!)
+                    level = 9
+                    
+                    
+                    
+                default: break
+                    
             }
 
         case .FrenchHorn :
-            println("It's a French Horn!")
+            //println("It's a French Horn!")
             switch level{
                 case 1 :
                     noteArray.append(noteList["G4t"]!)
@@ -774,37 +775,34 @@ class Instrument {
                     noteArray.append(noteList["C#5t"]!)
                     noteArray.append(noteList["Ab4t"]!)
                     noteArray.append(noteList["G#4t"]!)
-
                     level = 9
-                
-                
-                
+            
                 default: break
                 
             }
         case .BaritoneBass :
-            println("Gotcha a bass clef Baritone")
+            //println("Gotcha a bass clef Baritone")
                 instrumentType = .Trombone
                 noteArray = getNotes()
                 instrumentType = .BaritoneBass
         case .Bassoon :
-            println("Gotcha a Bassoon")
+            //println("Gotcha a Bassoon")
                 instrumentType = .Trombone
                 noteArray = getNotes()
                 instrumentType = .Bassoon
         case .Percussion :
-            println("The Percussion in the back row")
+            //println("The Percussion in the back row")
                 instrumentType = .Flute
                 noteArray = getNotes()
                 instrumentType = .Percussion
         case .BaritoneSaxophone :
-            println("It's the Bari")
+            //println("It's the Bari")
                 instrumentType = .AltoSaxophone
                 noteArray = getNotes()
                 instrumentType = .BaritoneSaxophone
         default :
-        println("No instrument selected")
-
+        //println("No instrument selected")
+            break
         }
         
         return noteArray

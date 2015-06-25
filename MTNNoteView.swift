@@ -5,6 +5,7 @@
 //  Created by Brian M Owen on 4/21/15.
 //  Copyright (c) 2015 Brian Owen. All rights reserved.
 //
+//  This is class for assigning the note value to an image. C = 1, C# = 2 ..... B = 12
 
 import UIKit
 

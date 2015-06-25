@@ -2,19 +2,19 @@
 //  HighScore.swift
 //  
 //
-//  Created by Brian M Owen on 5/28/15.
+//  Created by Brian M Owen on 6/18/15.
 //
 //
 
 import Foundation
 import CoreData
-//The next line is a fix recommendd by a stack overflow answer. Otherwise the data stack can't find this class
 @objc(HighScore)
 class HighScore: NSManagedObject {
 
+    @NSManaged var dateOfScore: NSDate
+    @NSManaged var instrument: String
     @NSManaged var level: NSNumber
     @NSManaged var score: NSNumber
-    @NSManaged var instrument: String
-    @NSManaged var dateOfScore: NSDate
+    @NSManaged var scoreImage: NSData
 
 }

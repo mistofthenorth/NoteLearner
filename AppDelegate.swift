@@ -21,17 +21,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            println("You got an iPad!")
+            //println("You got an iPad!")
             let ipadStoryboard : UIStoryboard = UIStoryboard(name: "iPad", bundle: NSBundle.mainBundle())
-            let initialViewController : ViewController = ipadStoryboard.instantiateInitialViewController() as! ViewController
+            let initialViewController : UIViewController = ipadStoryboard.instantiateInitialViewController() as! UIViewController
             window?.rootViewController = initialViewController
             
             
         }
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
-            println("You got a iPhone")
+            //println("You got a iPhone")
             let iphoneStoryboard : UIStoryboard = UIStoryboard(name: "iPhone", bundle: NSBundle.mainBundle())
-            let initialViewController : ViewController = iphoneStoryboard.instantiateInitialViewController() as! ViewController
+            let initialViewController : UIViewController = iphoneStoryboard.instantiateInitialViewController() as! UIViewController
             window?.rootViewController = initialViewController
         }
         return true

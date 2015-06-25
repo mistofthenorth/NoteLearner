@@ -13,19 +13,23 @@ import MessageUI
 
 class highScoreTableView: UITableViewController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate{
     
-    //@IBOutlet var tableView: UITableView!
     private var highScoreManagedObjectContext : NSManagedObjectContext?
     var fetchedScores: [HighScore]?
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "highScoreCell")
         //Get the high scores from the Core Data Database
         let context = UIApplication.sharedApplication().delegate as! AppDelegate!
         highScoreManagedObjectContext = context.managedObjectContext
         let request = NSFetchRequest(entityName: "HighScore")
+        
+        //Create a sort so the most recent items are at the top
+        let sortOrderByMostRecent = NSSortDescriptor(key: "dateOfScore", ascending: false)
+        let sortOrderByMostRecentArray = [sortOrderByMostRecent]
+        request.sortDescriptors = sortOrderByMostRecentArray
+
+        //Set the array of HighScore objects to a property for use latter
         self.fetchedScores = highScoreManagedObjectContext?.executeFetchRequest(request, error: NSErrorPointer()) as? [HighScore]
         println(fetchedScores)
         
@@ -36,29 +40,25 @@ class highScoreTableView: UITableViewController, UITableViewDelegate, UITableVie
         return self.fetchedScores!.count
     }
     
-override     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         println("This is row # \(indexPath)")
         
         if (MFMailComposeViewController.canSendMail()){
+            
             let mailComposer = MFMailComposeViewController()
             mailComposer.setSubject("A Score on NoteLearner was Recorded!")
-            mailComposer.setMessageBody("A score of \(self.fetchedScores![indexPath.row].score) was recorded on Level \(self.fetchedScores![indexPath.row].level)", isHTML: false)
-            let oneStars :NSData = UIImagePNGRepresentation(UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("oneStars", ofType: "png")!))
-            let twoStars :NSData = UIImagePNGRepresentation(UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("twoStars", ofType: "png")!))
-            let threeStars :NSData = UIImagePNGRepresentation(UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("threeStars", ofType: "png")!))
-
-            let score: Int = Int(self.fetchedScores![indexPath.row].score)
-            
-            if score<600{mailComposer.addAttachmentData(oneStars, mimeType: "image/png", fileName: "oneStars")}
-            else if score<1200{mailComposer.addAttachmentData(twoStars, mimeType: "image/png", fileName: "twoStars")}
-            else {mailComposer.addAttachmentData(threeStars, mimeType: "image/png", fileName: "threeStars")}
-            
+            mailComposer.setMessageBody("A score of \(self.fetchedScores![indexPath.row].score) was recorded on \(self.fetchedScores![indexPath.row].instrument) Level - \(self.fetchedScores![indexPath.row].level)", isHTML: false)
+            mailComposer.addAttachmentData(self.fetchedScores![indexPath.row].scoreImage, mimeType: "jpg", fileName: "\(self.fetchedScores![indexPath.row].score)NoteLearner.jpg")
             
             mailComposer.mailComposeDelegate = self
             self.presentViewController(mailComposer, animated: true, completion: nil)
         }
-        
+        else{
+            //Warn the user if mail is not available
+            let alert = UIAlertView(title: "Mail Error", message: "Mail features are not available on this device", delegate: nil, cancelButtonTitle: "OK")
+            alert.show()
+        }
+    
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -73,8 +73,13 @@ override
         else if score<1200{cell.imageView?.image = twoStars}
         else {cell.imageView?.image = threeStars}
         
-        cell.textLabel?.text = "\(self.fetchedScores![indexPath.row].instrument) \(self.fetchedScores![indexPath.row].score)"
-        cell.detailTextLabel?.text = "Level \(self.fetchedScores![indexPath.row].level)"
+        cell.textLabel?.text = "Level \(self.fetchedScores![indexPath.row].level) - \(self.fetchedScores![indexPath.row].score)"
+        cell.detailTextLabel?.text = "\(self.fetchedScores![indexPath.row].instrument)"
+
+        let imageMail = UIImageView(image: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("emailThumbnail", ofType: "png")!))
+        cell.accessoryView = imageMail
+
+        
         
         
         return cell

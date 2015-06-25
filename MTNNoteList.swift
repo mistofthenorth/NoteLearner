@@ -5,6 +5,7 @@
 //  Created by Brian M Owen on 4/19/15.
 //  Copyright (c) 2015 Brian Owen. All rights reserved.
 //
+//  This class exists purely for convenience in the note creation process. The Instrument class grabs this list before appending notes.
 
 import UIKit
 
@@ -12,6 +13,7 @@ class NoteList{
     
     class func returnNoteList() -> [String: NoteView] {
         var noteList = [String : NoteView]()
+        
         noteList["Ab1b"] = NoteView (note: 9, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Ab1b", ofType: "png")!))
         noteList["A1b"] = NoteView (note: 10, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("A1b", ofType: "png")!))
         noteList["Bb1b"] = NoteView (note: 11, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Bb1b", ofType: "png")!))
@@ -29,7 +31,7 @@ class NoteList{
         noteList["Ab2b"] = NoteView (note: 9, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Ab2b", ofType: "png")!))
         noteList["A2b"] = NoteView (note: 10, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("A2b", ofType: "png")!))
         noteList["Bb2b"] = NoteView (note: 11, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Bb2b", ofType: "png")!))
-
+        
         noteList["C3b"] = NoteView (note: 1, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C3b", ofType: "png")!))
         noteList["C#3b"] = NoteView (note: 2, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C#3b", ofType: "png")!))
         noteList["Db3b"] = NoteView (note: 2, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("Db3b", ofType: "png")!))
@@ -87,7 +89,7 @@ class NoteList{
         noteList["B5t"] = NoteView (note: 12, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("B5t", ofType: "png")!))
 
         noteList["C6t"] = NoteView (note: 1, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C6t", ofType: "png")!))
-
+        
         
         return noteList
     }
