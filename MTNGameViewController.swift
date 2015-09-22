@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class GameViewController: UIViewController, UIGestureRecognizerDelegate {
+class GameViewController: UIViewController, UIGestureRecognizerDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
 
     lazy var animator: UIDynamicAnimator = {let lazilyCreatedUIDynamicAnimator = UIDynamicAnimator(referenceView: self.gameView)
         return lazilyCreatedUIDynamicAnimator
@@ -22,18 +22,20 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
     var currentTapGesture = UIGestureRecognizer?()
     let gravity = UIGravityBehavior()
     var latestNoteView: NoteView?
-    var levelCompleteScoreView : UIView?
+    var splashScreenView : UIView?
     var iphoneGameViewScale : CGFloat = 1
     var gameLevel : Int = 1
     var gameInstrumentChoice : String = "Trumpet"
     var screenShotScore : NSData?
+    lazy var introViewCollectionArray : [NoteView] = {let newIntroViewCollectionArray = [NoteView](); return newIntroViewCollectionArray;}()
+    var introViewCollection : UICollectionView?
 
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //Set the background image
-        var backgroundImage = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("616x540threeBlankStaves", ofType: "png")!)!
+        let backgroundImage = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("616x540threeBlankStaves", ofType: "png")!)!
         gameView.backgroundColor = UIColor(patternImage: backgroundImage)
         //Add the view constraints and button styles
         setButtonLayout()
@@ -68,11 +70,12 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         chooseInstrument()
         //Start the gravity and update the label text
         startMoving()
-        
+        //Add the gravity and collision behavior for the notes
         animator.addBehavior(gravity)
         animator.addBehavior(collisions)
-        
-        addNewNoteToView()
+        //Start the sequence of notes
+        //addNewNoteToView()
+        createIntroScreen()
 
 
     }
@@ -127,6 +130,7 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func setButtonLayout(){
+        /*
         buttonA.setTranslatesAutoresizingMaskIntoConstraints(false)
         buttonB.setTranslatesAutoresizingMaskIntoConstraints(false)
         buttonC.setTranslatesAutoresizingMaskIntoConstraints(false)
@@ -139,7 +143,7 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         buttonAsharp.setTranslatesAutoresizingMaskIntoConstraints(false)
         buttonCsharp.setTranslatesAutoresizingMaskIntoConstraints(false)
         buttonDsharp.setTranslatesAutoresizingMaskIntoConstraints(false)
-
+        */
         
         let viewsDictionary = ["buttonA":buttonA, "buttonB":buttonB, "buttonC":buttonC, "buttonD":buttonD, "buttonE":buttonE, "buttonF":buttonF, "buttonG":buttonG]
         let sharpsAndFlatsDictionary = ["buttonCsharp":buttonCsharp, "buttonDsharp":buttonDsharp,"buttonFsharp" :buttonFsharp, "buttonGsharp":buttonGsharp, "buttonAsharp":buttonAsharp]
@@ -147,8 +151,8 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
             //println("New code for iPhone only")
-            let buttonRowConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[buttonC(==buttonD)]-[buttonD(==buttonC)]-[buttonE(==buttonC)]-[buttonF(==buttonC)]-[buttonG(==buttonC)]-[buttonA(==buttonC)]-[buttonB(==buttonC)]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary)
-            let sharpsAndFlatsConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-45-[buttonCsharp]-[buttonDsharp(==buttonCsharp)]-35-[buttonFsharp(==buttonCsharp)]-[buttonGsharp(==buttonCsharp)]-[buttonAsharp(==buttonCsharp)]-35-|", options: NSLayoutFormatOptions(0), metrics: nil, views: sharpsAndFlatsDictionary)
+            let buttonRowConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[buttonC(==buttonD)]-[buttonD(==buttonC)]-[buttonE(==buttonC)]-[buttonF(==buttonC)]-[buttonG(==buttonC)]-[buttonA(==buttonC)]-[buttonB(==buttonC)]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+            let sharpsAndFlatsConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-45-[buttonCsharp]-[buttonDsharp(==buttonCsharp)]-35-[buttonFsharp(==buttonCsharp)]-[buttonGsharp(==buttonCsharp)]-[buttonAsharp(==buttonCsharp)]-35-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: sharpsAndFlatsDictionary)
             
             view.addConstraints(sharpsAndFlatsConstraint)
             view.addConstraints(buttonRowConstraint)
@@ -156,8 +160,8 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            let buttonRowConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[buttonC(==buttonD)]-[buttonD(==buttonC)]-[buttonE(==buttonC)]-[buttonF(==buttonC)]-[buttonG(==buttonC)]-[buttonA(==buttonC)]-[buttonB(==buttonC)]-|", options: NSLayoutFormatOptions(0), metrics: nil, views: viewsDictionary)
-            let sharpsAndFlatsConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-65-[buttonCsharp]-[buttonDsharp(==buttonCsharp)]-90-[buttonFsharp(==buttonCsharp)]-[buttonGsharp(==buttonCsharp)]-[buttonAsharp(==buttonCsharp)]-65-|", options: NSLayoutFormatOptions(0), metrics: nil, views: sharpsAndFlatsDictionary)
+            let buttonRowConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-[buttonC(==buttonD)]-[buttonD(==buttonC)]-[buttonE(==buttonC)]-[buttonF(==buttonC)]-[buttonG(==buttonC)]-[buttonA(==buttonC)]-[buttonB(==buttonC)]-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDictionary)
+            let sharpsAndFlatsConstraint:Array = NSLayoutConstraint.constraintsWithVisualFormat("H:|-65-[buttonCsharp]-[buttonDsharp(==buttonCsharp)]-90-[buttonFsharp(==buttonCsharp)]-[buttonGsharp(==buttonCsharp)]-[buttonAsharp(==buttonCsharp)]-65-|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: sharpsAndFlatsDictionary)
             
             view.addConstraints(sharpsAndFlatsConstraint)
             view.addConstraints(buttonRowConstraint)
@@ -173,8 +177,8 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         let context = UIApplication.sharedApplication().delegate as! AppDelegate!
         let highScoreManagedObjectContext = context.managedObjectContext
         //Create entity
-        let entity = NSEntityDescription.entityForName("HighScore", inManagedObjectContext: highScoreManagedObjectContext!)
-        let newHighScore = HighScore(entity: entity!, insertIntoManagedObjectContext: highScoreManagedObjectContext!)
+        let entity = NSEntityDescription.entityForName("HighScore", inManagedObjectContext: highScoreManagedObjectContext)
+        let newHighScore = HighScore(entity: entity!, insertIntoManagedObjectContext: highScoreManagedObjectContext)
         
         //Set Values for the new object
         newHighScore.level = currentGameManager!.instrumentType!.level
@@ -184,7 +188,15 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         newHighScore.dateOfScore = NSDate()
         
         //Save the context and print true if the save worked
-        let check = highScoreManagedObjectContext!.save(NSErrorPointer())
+        do {
+            try highScoreManagedObjectContext.save()
+        }
+        catch {
+            let nserror = error as NSError
+            NSLog("Unresolved error \(nserror), \(nserror.userInfo)")
+            abort()
+        }
+        //let check = highScoreManagedObjectContext.save(NSErrorPointer())
         //println("High Score Saved = \(check)")
     
     
@@ -193,9 +205,14 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
     
     func handleTap(recognizer: UIGestureRecognizer){
         //println("User has tapped")
-        levelCompleteScoreView?.removeFromSuperview()
-        mainView.alpha = 1
+        splashScreenView?.removeFromSuperview()
         self.performSegueWithIdentifier("unwindToIntroVC", sender: self)
+    }
+    
+    func handleTapFromSplash(recognizer: UIGestureRecognizer){
+        //println("User has tapped")
+        introViewCollection?.removeFromSuperview()
+        addNewNoteToView()
     }
     
     func newLevel(){
@@ -203,40 +220,38 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         
         //Create new view for displaying score to the user
         
-        levelCompleteScoreView = UIView(frame: CGRectMake(0, 0, 400, 300))
+        splashScreenView = UIView(frame: CGRectMake(0, 0, 400, 300))
         var xFloat: CGFloat = CGRectGetMidX(gameView.bounds)
         var yFloat: CGFloat = CGRectGetMidY(gameView.bounds)
-        levelCompleteScoreView?.center = CGPoint(x: xFloat, y: yFloat)
-        levelCompleteScoreView?.backgroundColor = UIColor(white: 250, alpha: 1)
-        mainView.alpha = 1
+        splashScreenView?.center = CGPoint(x: xFloat, y: yFloat)
+        splashScreenView?.backgroundColor = UIColor(white: 250, alpha: 1)
         
         //Add tap gesture to remove the new frame
         currentTapGesture = UITapGestureRecognizer(target: self, action: Selector("handleTap:"))
         currentTapGesture?.delegate = self
         mainView?.addGestureRecognizer(currentTapGesture!)
-        
-        gameView.addSubview(levelCompleteScoreView!)
+        gameView.addSubview(splashScreenView!)
         
         //Add the appropriate text with a UILabel
         betweenLevelTextLabel = UILabel(frame: CGRectMake(0, 0, 300, 300))
         betweenLevelTextLabel?.numberOfLines = 4
-        xFloat = CGRectGetMidX(levelCompleteScoreView!.bounds)
-        yFloat = CGRectGetMidY(levelCompleteScoreView!.bounds)
+        xFloat = CGRectGetMidX(splashScreenView!.bounds)
+        yFloat = CGRectGetMidY(splashScreenView!.bounds)
         betweenLevelTextLabel?.center = CGPointMake(xFloat,yFloat)
         betweenLevelTextLabel?.textAlignment = NSTextAlignment.Center
         betweenLevelTextLabel?.text = "You got \(pointsInt) points! \n \(currentGameManager!.instrumentType!.instrumentType.rawValue) Level - \(currentGameManager!.whichLevel!)"
-        levelCompleteScoreView?.addSubview(betweenLevelTextLabel!)
+        splashScreenView?.addSubview(betweenLevelTextLabel!)
         
         var starImage = UIImageView(image: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("oneStars", ofType: "png")!))
         if (pointsInt>600){starImage = UIImageView(image: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("twoStars", ofType: "png")!))}
         if (pointsInt>1200){starImage = UIImageView(image: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("threeStars", ofType: "png")!))}
         starImage.frame = CGRectMake(0, 0, 200, 133)
-        starImage.center = CGPointMake(CGFloat(levelCompleteScoreView!.bounds.midX), CGFloat(levelCompleteScoreView!.bounds.maxY-68))
-        levelCompleteScoreView?.addSubview(starImage)
+        starImage.center = CGPointMake(CGFloat(splashScreenView!.bounds.midX), CGFloat(splashScreenView!.bounds.maxY-68))
+        splashScreenView?.addSubview(starImage)
         
-        UIGraphicsBeginImageContext(self.levelCompleteScoreView!.bounds.size);
-        levelCompleteScoreView?.layer.renderInContext(UIGraphicsGetCurrentContext())
-        var screenShot = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsBeginImageContext(self.splashScreenView!.bounds.size);
+        splashScreenView?.layer.renderInContext(UIGraphicsGetCurrentContext()!)
+        let screenShot = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         screenShotScore = UIImageJPEGRepresentation(screenShot, 0.8)
         
@@ -250,7 +265,7 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
     //The next three functions check for the correct note according to an int representing each note
     func addPointsWithAnimation(){
 
-        var pointsScored = currentGameManager!.getScoreForNote((gameView!.frame.maxX-latestNoteView!.frame.size.width), currentX: latestNoteView!.frame.minX)
+        let pointsScored = currentGameManager!.getScoreForNote((gameView!.frame.maxX-latestNoteView!.frame.size.width), currentX: latestNoteView!.frame.minX)
         //println(latestNoteView!.frame.maxX)
         let pointLabel = UILabel(frame: latestNoteView!.frame)
         pointLabel.textAlignment = NSTextAlignment.Center
@@ -260,15 +275,18 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         let pointLabelEndPosition = CGRectMake(pointLabel.frame.minX, pointLabel.frame.minY-45, pointLabel.frame.width, pointLabel.frame.height)
         gameView.addSubview(pointLabel)
         
-        UIView.animateWithDuration(1.2, delay: 0, options: nil, animations: {pointLabel.alpha = 1; pointLabel.frame = pointLabelEndPosition}, completion: {complete in pointLabel.removeFromSuperview(); self.pointsInt += pointsScored; self.numberOfPoints.text = String(self.pointsInt)})
-
-
+        //UIView.animateWithDuration(1.2, delay: 0, options: nil, animations: {pointLabel.alpha = 1; pointLabel.frame = pointLabelEndPosition}, completion: {complete in pointLabel.removeFromSuperview(); self.pointsInt += pointsScored; self.numberOfPoints.text = String(self.pointsInt)})
+        //UIView.animateWithDuration(1.2, delay: 0, options: UIViewAnimationOptions.BeginFromCurrentState, animations: {pointLabel.alpha = 1; pointLabel.frame = pointLabelEndPosition}, completion: {complete in pointLabel.removeFromSuperview(); self.pointsInt += pointsScored; self.numberOfPoints.text = String(self.pointsInt)})
+        
+        //Swift 2.0 update
+        UIView.animateWithDuration(1.2, animations: {pointLabel.alpha = 1; pointLabel.frame = pointLabelEndPosition}, completion: {complete in pointLabel.removeFromSuperview(); self.pointsInt += pointsScored; self.numberOfPoints.text = String(self.pointsInt)})
     }
     
     
     func animateNoteDisappear(){
         gravity.removeItem(latestNoteView!)
-        UIView.animateWithDuration(0.5, delay: 0, options: nil, animations: {self.latestNoteView?.alpha = 0; self.latestNoteView?.frame = CGRectMake(self.latestNoteView!.frame.midX, self.latestNoteView!.frame.midY+50, 0, 0)}, completion: {complete in self.latestNoteView?.removeFromSuperview()})
+        //UIView.animateWithDuration(0.5, delay: 0, options: nil, animations: {self.latestNoteView?.alpha = 0; self.latestNoteView?.frame = CGRectMake(self.latestNoteView!.frame.midX, self.latestNoteView!.frame.midY+50, 0, 0)}, completion: {complete in self.latestNoteView?.removeFromSuperview()})
+        UIView.animateWithDuration(0.5, animations: {self.latestNoteView?.alpha = 0; self.latestNoteView?.frame = CGRectMake(self.latestNoteView!.frame.midX, self.latestNoteView!.frame.midY+50, 0, 0)}, completion: {complete in self.latestNoteView?.removeFromSuperview()})
         
     }
     
@@ -299,11 +317,11 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
                     animateNoteDisappear()
                     
                     if (noteScoreInt < 15){
-                        var aDelay = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector:Selector("addNewNoteToView"), userInfo: nil, repeats: false)
+                        NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector:Selector("addNewNoteToView"), userInfo: nil, repeats: false)
                         //println("You ran the timer again")
                     }
                     if (noteScoreInt == 15){
-                        var aDelay = NSTimer.scheduledTimerWithTimeInterval(1.5, target: self, selector:Selector("newLevel"), userInfo: nil, repeats: false)
+                        NSTimer.scheduledTimerWithTimeInterval(1.5, target: self, selector:Selector("newLevel"), userInfo: nil, repeats: false)
                     }
 
                 }
@@ -339,8 +357,11 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         numberOfPoints.text = String(pointsInt)
         gravity.angle = 3.1415
         gravity.magnitude = currentGameManager!.getGravityMagnitude()
-        mainView.alpha = 1
         
+    }
+    func createIntroScreen(){
+        createSplashScreen()
+    
     }
     
     func addNewNoteToView(){
@@ -349,7 +370,7 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         
         latestNoteView?.removeFromSuperview()
         
-        var getNewNote = currentGameManager!.note()
+        let getNewNote = currentGameManager!.note()
         latestNoteView = getNewNote
         
         //Create a default position for the note, then choose a random stave of the three available
@@ -395,6 +416,79 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate {
         */
     }
 
+    func createSplashScreen() {
+        //splashScreenView = UIView(frame: CGRectMake(0, 0, 600, 300))
+        let xFloat: CGFloat = CGRectGetMidX(gameView.bounds)
+        let yFloat: CGFloat = CGRectGetMidY(gameView.bounds)
+        //splashScreenView?.center = CGPoint(x: xFloat, y: yFloat)
+        //splashScreenView?.backgroundColor = UIColor(white: 250, alpha: 1)
+        
+        //Add tap gesture to remove the new frame
+        currentTapGesture = UITapGestureRecognizer(target: self, action: Selector("handleTapFromSplash:"))
+        currentTapGesture?.delegate = self
+        mainView?.addGestureRecognizer(currentTapGesture!)
+        
+        /*
+        let noteIntroView = NoteView (note: 1, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C4t", ofType: "png")!))
+        let noteIntroView2 = NoteView (note: 3, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("D4t", ofType: "png")!))
+        let noteIntroView3 = NoteView (note: 5, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("E4t", ofType: "png")!))
+        
+        introViewCollectionArray.append(noteIntroView)
+        introViewCollectionArray.append(noteIntroView2)
+        introViewCollectionArray.append(noteIntroView3)
+*/
+        introViewCollectionArray = (currentGameManager?.newNotesOnlyArray)!
+        
+        let borderView = UIView(frame: CGRectMake(0, 0, 320, 201))
+        borderView.center = CGPoint(x: xFloat, y: yFloat)
+        borderView.backgroundColor = UIColor.blackColor()
+        gameView.addSubview(borderView)
+        
+        let collection = UICollectionViewFlowLayout()
+        collection.headerReferenceSize = CGSizeMake(100, 100)
+        introViewCollection = UICollectionView(frame: CGRectMake(0, 0, 300, 181), collectionViewLayout: collection)
+        introViewCollection?.registerClass(MTNCollectionViewHeaderForIntroView.self, forSupplementaryViewOfKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "CellHeader")
+        introViewCollection?.center = CGPoint(x: xFloat, y: yFloat)
+        introViewCollection?.delegate = self
+        introViewCollection?.dataSource = self
+        
+        //introViewCollection?.alpha = 1
+        //collectionView.backgroundColor = UIColor.whiteColor()
+        introViewCollection?.backgroundColor = UIColor(patternImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("blankStaff", ofType: "png")!)!)
+        introViewCollection?.registerClass(MTNCollectionViewCellForIntroView.self, forCellWithReuseIdentifier: "CellIdentifier")
+        collection.scrollDirection = UICollectionViewScrollDirection.Horizontal
+        //collection.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10)
+        collection.itemSize = CGSizeMake(180, 180)
+        
+        gameView.addSubview(introViewCollection!)
+
+        //splashScreenView?.addSubview(collectionView)
+        
+    }
+    
+    
+    
+    //Collection view methods - these generate the image views in the intro screen
+    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return introViewCollectionArray.count
+    }
+    
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+        
+        let cell:MTNCollectionViewCellForIntroView=collectionView.dequeueReusableCellWithReuseIdentifier("CellIdentifier", forIndexPath: indexPath) as! MTNCollectionViewCellForIntroView;
+        cell.printMessage()
+        cell.backgroundView = UIImageView(image: introViewCollectionArray[indexPath.row].image)
+        let noteInteger = introViewCollectionArray[indexPath.row].noteName
+        let noteIntegerString = String(noteInteger)
+        cell.addLabel(noteIntegerString)
+        return cell;
+    }
+    
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        let header: MTNCollectionViewHeaderForIntroView = collectionView.dequeueReusableSupplementaryViewOfKind(UICollectionElementKindSectionHeader, withReuseIdentifier: "CellHeader", forIndexPath: indexPath) as! MTNCollectionViewHeaderForIntroView
+        return header
+    }
+    
     
     @IBAction func touchNoteName(sender: AnyObject) {
         let noteName = sender.currentTitle!

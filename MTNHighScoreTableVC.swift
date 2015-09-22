@@ -11,7 +11,7 @@ import UIKit
 import CoreData
 import MessageUI
 
-class highScoreTableView: UITableViewController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate{
+class highScoreTableView: UITableViewController, MFMailComposeViewControllerDelegate{
     
     private var highScoreManagedObjectContext : NSManagedObjectContext?
     var fetchedScores: [HighScore]?
@@ -30,8 +30,15 @@ class highScoreTableView: UITableViewController, UITableViewDelegate, UITableVie
         request.sortDescriptors = sortOrderByMostRecentArray
 
         //Set the array of HighScore objects to a property for use latter
-        self.fetchedScores = highScoreManagedObjectContext?.executeFetchRequest(request, error: NSErrorPointer()) as? [HighScore]
-        println(fetchedScores)
+        
+        do{
+            try self.fetchedScores = highScoreManagedObjectContext?.executeFetchRequest(request) as? [HighScore]
+        } catch{
+            print("Error getting the High Score Object")
+        }
+        
+        //self.fetchedScores = highScoreManagedObjectContext?.executeFetchRequest(request) as? [HighScore]
+        print(fetchedScores)
         
     }
     
@@ -41,22 +48,33 @@ class highScoreTableView: UITableViewController, UITableViewDelegate, UITableVie
     }
     
 override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        println("This is row # \(indexPath)")
+        print("This is row # \(indexPath)")
         
         if (MFMailComposeViewController.canSendMail()){
             
             let mailComposer = MFMailComposeViewController()
-            mailComposer.setSubject("A Score on NoteLearner was Recorded!")
+            mailComposer.setSubject("A Score on Band Note Learner was Recorded!")
             mailComposer.setMessageBody("A score of \(self.fetchedScores![indexPath.row].score) was recorded on \(self.fetchedScores![indexPath.row].instrument) Level - \(self.fetchedScores![indexPath.row].level)", isHTML: false)
             mailComposer.addAttachmentData(self.fetchedScores![indexPath.row].scoreImage, mimeType: "jpg", fileName: "\(self.fetchedScores![indexPath.row].score)NoteLearner.jpg")
             
             mailComposer.mailComposeDelegate = self
+            
             self.presentViewController(mailComposer, animated: true, completion: nil)
+
         }
         else{
             //Warn the user if mail is not available
-            let alert = UIAlertView(title: "Mail Error", message: "Mail features are not available on this device", delegate: nil, cancelButtonTitle: "OK")
-            alert.show()
+            //let alert = UIAlertView(title: "Mail Error", message: "Mail features are not available on this device", delegate: nil, cancelButtonTitle: "OK")
+            let alertController = UIAlertController(title: "Mail Error", message: "Mail features are not available on this device.", preferredStyle: .Alert)
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                // ...
+            }
+            alertController.addAction(OKAction)
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+
+            //alert.show()
         }
     
     }
@@ -67,7 +85,7 @@ override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPat
         let oneStars = UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("oneStars", ofType: "png")!)
 
 
-        var cell:UITableViewCell = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell
+        let cell:UITableViewCell = tableView.dequeueReusableCellWithIdentifier("cell")!
         let score: Int = Int(self.fetchedScores![indexPath.row].score)
         if score<600{cell.imageView?.image = oneStars}
         else if score<1200{cell.imageView?.image = twoStars}
@@ -85,7 +103,7 @@ override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPat
         return cell
     }
     
-    func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 }

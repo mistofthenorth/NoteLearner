@@ -14,6 +14,7 @@ class GameManager{
     let whichLevel : Int?
     var instrumentType : Instrument? = nil
     var sortedNoteChoicesArray : [NoteView]?
+    var newNotesOnlyArray : [NoteView]?
     
     init(levelNumber: Int, instrument: String)
     {
@@ -23,17 +24,23 @@ class GameManager{
     }
         //Borrowed from Stack Overflow - Fisher-Yates Shuffle
     func shuffle<C: MutableCollectionType where C.Index == Int>(var list: C) -> C {
-        let c = count(list)
+        //TODO - check the shuffle
+        let c = list.count
         for i in 0..<(c - 1) {
             let j = Int(arc4random_uniform(UInt32(c - i))) + i
-            swap(&list[i], &list[j])
+            //Next line is added to avoid swapping the same item
+            //TODO - verify accuracy
+            if (i != j)
+                {swap(&list[i], &list[j])}
         }
         return list
     }
     
     func setupNotelistArrayForGame() {
         //Get an array of possible notes for the level, could be 3, or upwards of 20
-        let noteChoices : [NoteView] = instrumentType!.getNotes()
+        let noteChoicesTuple = instrumentType!.getNotes()
+        let noteChoices : [NoteView] = noteChoicesTuple.allNotesForGame
+        newNotesOnlyArray = noteChoicesTuple.newNotesOnly
         //Create a new array and append the notes to it
         sortedNoteChoicesArray = [NoteView]()
         for notes in noteChoices{
@@ -42,7 +49,8 @@ class GameManager{
         //Repeat this process if there are less than 15 notes. This is a defensive copying technique to avoid pass by reference
         while(sortedNoteChoicesArray?.count<15)
         {
-            let moreNoteChoices = instrumentType!.getNotes()
+            let moreNoteChoicesTuple = instrumentType!.getNotes()
+            let moreNoteChoices = moreNoteChoicesTuple.allNotesForGame
             for notes in moreNoteChoices{
                 sortedNoteChoicesArray?.append(notes)
             }
@@ -50,6 +58,7 @@ class GameManager{
         
         //Shuffle is a Fisher-Yates shuffle implementation to randomize which notes appear in which order
         sortedNoteChoicesArray = shuffle(sortedNoteChoicesArray!)
+        
         //Uncomment the following line to see what the array of notes is based on the integer representing a note (1-12)
         /*
         for i in sortedNoteChoicesArray!{
