@@ -11,8 +11,9 @@ import UIKit
 
 class NoteView : UIImageView{
 
-    init(note: Int, noteImage: UIImage!) {
+    init(note: Int, noteString: String, noteImage: UIImage!) {
         self.noteName = note
+        self.noteNameAsString = noteString
         super.init(image: noteImage)
     }
 
@@ -22,5 +23,6 @@ class NoteView : UIImageView{
     
     
     let noteName : Int
+    let noteNameAsString : String
 
 }

@@ -212,6 +212,7 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate, UIColle
     func handleTapFromSplash(recognizer: UIGestureRecognizer){
         //println("User has tapped")
         introViewCollection?.removeFromSuperview()
+        splashScreenView?.removeFromSuperview()
         addNewNoteToView()
     }
     
@@ -428,21 +429,12 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate, UIColle
         currentTapGesture?.delegate = self
         mainView?.addGestureRecognizer(currentTapGesture!)
         
-        /*
-        let noteIntroView = NoteView (note: 1, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("C4t", ofType: "png")!))
-        let noteIntroView2 = NoteView (note: 3, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("D4t", ofType: "png")!))
-        let noteIntroView3 = NoteView (note: 5, noteImage: UIImage(contentsOfFile: NSBundle.mainBundle().pathForResource("E4t", ofType: "png")!))
-        
-        introViewCollectionArray.append(noteIntroView)
-        introViewCollectionArray.append(noteIntroView2)
-        introViewCollectionArray.append(noteIntroView3)
-*/
         introViewCollectionArray = (currentGameManager?.newNotesOnlyArray)!
         
-        let borderView = UIView(frame: CGRectMake(0, 0, 320, 201))
-        borderView.center = CGPoint(x: xFloat, y: yFloat)
-        borderView.backgroundColor = UIColor.blackColor()
-        gameView.addSubview(borderView)
+        splashScreenView = UIView(frame: CGRectMake(0, 0, 320, 201))
+        splashScreenView!.center = CGPoint(x: xFloat, y: yFloat)
+        splashScreenView!.backgroundColor = UIColor.blackColor()
+        gameView.addSubview(splashScreenView!)
         
         let collection = UICollectionViewFlowLayout()
         collection.headerReferenceSize = CGSizeMake(100, 100)
@@ -478,9 +470,9 @@ class GameViewController: UIViewController, UIGestureRecognizerDelegate, UIColle
         let cell:MTNCollectionViewCellForIntroView=collectionView.dequeueReusableCellWithReuseIdentifier("CellIdentifier", forIndexPath: indexPath) as! MTNCollectionViewCellForIntroView;
         cell.printMessage()
         cell.backgroundView = UIImageView(image: introViewCollectionArray[indexPath.row].image)
-        let noteInteger = introViewCollectionArray[indexPath.row].noteName
-        let noteIntegerString = String(noteInteger)
-        cell.addLabel(noteIntegerString)
+        //let noteInteger = introViewCollectionArray[indexPath.row].note
+        //let noteIntegerString = String(noteInteger)
+        cell.addLabel(introViewCollectionArray[indexPath.row].noteNameAsString)
         return cell;
     }
     

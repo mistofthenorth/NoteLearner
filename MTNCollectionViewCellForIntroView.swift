@@ -15,7 +15,7 @@ class MTNCollectionViewCellForIntroView: UICollectionViewCell {
     }
     
     func addLabel(noteName: String){
-        let textLocation = CGRectMake(contentView.frame.midX+18, contentView.frame.minY+20, 20, 20)
+        let textLocation = CGRectMake(contentView.frame.midX+18, contentView.frame.minY, 40, 20)
         let testLabel = UILabel(frame: textLocation)
         testLabel.text = noteName
         contentView.addSubview(testLabel)
